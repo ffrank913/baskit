@@ -12,6 +12,7 @@ import { IRecipe } from "../../RecipesLib";
 import { AssetLib } from "../../AssetLib";
 import IngredientsList from "./ingredients/IngredientsList";
 import Instructions from "./instructions/Instructions";
+import AddToBasket from "./addtobasket/AddToBasket";
 
 export default function RecipeModal(props: {
   data: IRecipe;
@@ -23,7 +24,6 @@ export default function RecipeModal(props: {
         <ScrollView style={styles.content}>
           <View style={{
               height: 44,
-              right: 0,
             }}>
           <TouchableOpacity
             style={{
@@ -50,6 +50,7 @@ export default function RecipeModal(props: {
           <IngredientsList ingredients={props.data.ingredients}></IngredientsList>
           <Text style={styles.ingredientsTitle}>{"Anleitung"}</Text>
           <Instructions instructions={props.data.instructions}/>
+          <AddToBasket/>
         </ScrollView>
       </View>
     </View>
