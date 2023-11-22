@@ -18,7 +18,7 @@ export default function Checkbox(props: {
         }}
       >
         <Image
-          style={{ width: 28, height: 28, marginRight: 8 }}
+          style={{ width: 28, height: 28 }}
           source={AssetLib.Unchecked}
         ></Image>
         {checked && (
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    margin: 2,
   },
   checkbox: {
     flexDirection: "row",

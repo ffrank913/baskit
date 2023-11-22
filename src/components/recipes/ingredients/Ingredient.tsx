@@ -15,18 +15,24 @@ export default function Ingredient(props: { ingredient: IIngedrient }) {
   }
 
   return (
-    <Checkbox defaultValue={true}>
-      <Text style={styles.text}>{text}</Text>
-    </Checkbox>
+    <View style={styles.container}>
+      <Checkbox defaultValue={true}>
+        <Text style={styles.text}>{text}</Text>
+      </Checkbox>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
+  container: {
     flex: 1,
-    height: "100%",
-    top: 3,
+    height: 42,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  text: {
     color: "white",
-    fontSize: 18,
+    fontSize: 22,
+    marginLeft: 8,
   },
 });
