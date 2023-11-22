@@ -1,23 +1,28 @@
 import { useMemo, useState } from "react";
 import { Text } from "react-native-paper";
 import { TouchableOpacity, Image, StyleSheet, View } from "react-native";
-import { IIngedrient } from "../../../RecipesLib";
+import { IIngredient } from "../../../RecipesLib";
 import Checkbox from "../../checkbox/Checkbox";
 
-export default function Ingredient(props: { ingredient: IIngedrient }) {
-  let text: string = props.ingredient.name;
-  if(props.ingredient.count) {
-    if(!props.ingredient.unit) {
-      text = props.ingredient.count + " " + props.ingredient.name;
+export const AssembleIngredient = (ingredient: IIngredient): string => {
+  let text: string = ingredient.name;
+  if(ingredient.count) {
+    if(!ingredient.unit) {
+      text = ingredient.count + " " + ingredient.name;
     } else {
-      text = props.ingredient.count + " " + props.ingredient.unit + " " + props.ingredient.name;
+      text = ingredient.count + " " + ingredient.unit + " " + ingredient.name;
     }
   }
+  return text;
+}
+
+export default function Ingredient(props: { ingredient: IIngredient }) {
+  
 
   return (
     <View style={styles.container}>
       <Checkbox defaultValue={true}>
-        <Text style={styles.text}>{text}</Text>
+        <Text style={styles.text}>{AssembleIngredient(props.ingredient)}</Text>
       </Checkbox>
     </View>
   );

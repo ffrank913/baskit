@@ -2,11 +2,11 @@ import * as React from 'react';
 import { BottomNavigation } from 'react-native-paper';
 import Home from './routes/Home';
 import Recipes from './routes/Recipes';
-import BasketList from './routes/BasketList';
+import Basket from './routes/Basket';
 
 const HomeRoute = () => <Home/>
 const RecipesRoute = () => <Recipes/>
-const BasketListRoute = () => <BasketList/>
+const BasketListRoute = () => <Basket/>
 
 export default function Router() {
     const [index, setIndex] = React.useState(0);

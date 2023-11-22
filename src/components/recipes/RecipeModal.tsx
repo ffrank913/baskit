@@ -3,9 +3,8 @@ import {
   View,
   Image,
   TouchableOpacity,
-  FlatList,
 } from "react-native";
-import { List, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
 import { IRecipe } from "../../RecipesLib";
@@ -13,11 +12,15 @@ import { AssetLib } from "../../AssetLib";
 import IngredientsList from "./ingredients/IngredientsList";
 import Instructions from "./instructions/Instructions";
 import AddToBasket from "./addtobasket/AddToBasket";
+import { useContext } from "react";
+import { BasketItemContext } from "../../context/ContextProviders";
 
 export default function RecipeModal(props: {
   data: IRecipe;
   onClose: () => void;
 }) {
+  const { basketItems, setBasketItems } = useContext(BasketItemContext);
+  
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>
       <View style={styles.container}>
@@ -66,7 +69,9 @@ export default function RecipeModal(props: {
           <IngredientsList ingredients={props.data.ingredients}></IngredientsList>
           <Text style={styles.ingredientsTitle}>{"Anleitung"}</Text>
           <Instructions instructions={props.data.instructions}/>
-          <AddToBasket/>
+          <AddToBasket onAdd={() => {
+            setBasketItems(basketItems.concat(props.data.ingredients))
+          }}/>
         </ScrollView>
       </View>
     </View>

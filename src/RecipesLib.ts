@@ -17,12 +17,12 @@ export type IRecipe = {
   id: string,
   title: string,
   image: string,
-  ingredients: IIngedrient[],
+  ingredients: IIngredient[],
   description: string,
   instructions: string[],
 }
 
-export type IIngedrient = {
+export type IIngredient = {
   name: string,
   count: number | null,
   unit: string | null,

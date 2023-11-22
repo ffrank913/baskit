@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet } from "react-native";
-import { IIngedrient } from "../../../RecipesLib";
+import { IIngredient } from "../../../RecipesLib";
 import Ingredient from "./Ingredient";
 
-export default function IngredientsList(props: { ingredients: IIngedrient[] }) {
+export default function IngredientsList(props: { ingredients: IIngredient[] }) {
   return (
     <FlatList
       style={styles.list}
