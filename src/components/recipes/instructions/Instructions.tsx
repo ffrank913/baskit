@@ -7,7 +7,7 @@ export default function Instructions(props: { instructions: string[] }) {
       {props.instructions &&
         props.instructions.map((instruction: string, index: number) => {
           return (
-            <View style={styles.instruction}>
+            <View style={styles.instruction} key={index + 1}>
               <Text style={styles.counter}>{index + 1 + "."}</Text>
               <Text style={styles.text}>{instruction}</Text>
             </View>
