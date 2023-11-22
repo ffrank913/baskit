@@ -24,13 +24,13 @@ export default function RecipeModal(props: {
         <ScrollView style={styles.content}>
           <View style={{
               height: 44,
+              flexDirection: "row-reverse"
             }}>
           <TouchableOpacity
             style={{
-              position: "absolute",
               width: 44,
               height: 44,
-              right: 0,
+              marginLeft: 16,
               zIndex: 1,
             }}
             onPress={() => {
@@ -40,6 +40,22 @@ export default function RecipeModal(props: {
             <Image
               style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
               source={AssetLib.Cross}
+            ></Image>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 48,
+              height: 48,
+              marginLeft: 16,
+              zIndex: 1,
+            }}
+            onPress={() => {
+              props.onClose();
+            }}
+          >
+            <Image
+              style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
+              source={AssetLib.Edit}
             ></Image>
           </TouchableOpacity>
           </View>

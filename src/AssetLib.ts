@@ -19,4 +19,9 @@ export const AssetLib = {
         require("../assets/icons/unchecked.png")
       )
     : require("../assets/icons/unchecked.png"),
+    Edit: isAndroid
+    ? Asset.fromModule(
+        require("../assets/icons/edit.png")
+      )
+    : require("../assets/icons/edit.png"),
 }
