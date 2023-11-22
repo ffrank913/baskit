@@ -1,12 +1,16 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { IRecipe } from "../../../RecipesLib";
-import { Button } from "react-native-paper";
+import { Text } from "react-native-paper";
 
 export default function AddToBasket() {
   return (
     <View style={styles.container}>
-      <Button style={styles.button} labelStyle={{ color: "white" }}> Add To Basket </Button>
-      <Button style={styles.button} labelStyle={{ color: "white" }}> Edit </Button>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.text}>Add To Basket </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.text}>Edit </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -21,7 +25,19 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 8,
     marginRight: 8,
+
+    alignItems: "center",
+    justifyContent: "center",
+
     borderRadius: 4,
-    backgroundColor: "rgba(60, 60, 60, 0.6)"
+    backgroundColor: "rgba(40, 40, 40, 0.8)",
+  },
+  text: {
+    height: 42,
+    top: 11,
+
+    fontSize: 16,
+
+    color: "white",
   },
 });
