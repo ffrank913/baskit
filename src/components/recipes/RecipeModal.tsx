@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
 import { IRecipe } from "../../RecipesLib";
 import { AssetLib } from "../../AssetLib";
-import IngredientsList from "./ingredients/IngredientsList";
+import RecipeIngredientsList from "./recipeIngredients/RecipeIngredientsList";
 import Instructions from "./instructions/Instructions";
 import AddToBasket from "./addtobasket/AddToBasket";
 import { useContext } from "react";
@@ -66,7 +66,7 @@ export default function RecipeModal(props: {
           <Image style={styles.image} source={ImageLib[props.data.image]} />
           <Text style={styles.description}>{"Beschreibung: " + props.data.description}</Text>
           <Text style={styles.ingredientsTitle}>{"Zutaten"}</Text>
-          <IngredientsList ingredients={props.data.ingredients}></IngredientsList>
+          <RecipeIngredientsList ingredients={props.data.ingredients}/>
           <Text style={styles.ingredientsTitle}>{"Anleitung"}</Text>
           <Instructions instructions={props.data.instructions}/>
           <AddToBasket onAdd={() => {

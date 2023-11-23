@@ -16,7 +16,7 @@ export const AssembleIngredient = (ingredient: IIngredient): string => {
   return text;
 }
 
-export default function Ingredient(props: { ingredient: IIngredient }) {
+export default function RecipeIngredient(props: { ingredient: IIngredient }) {
   
 
   return (
