@@ -5,7 +5,7 @@ import Checkbox from "../../checkbox/Checkbox";
 import { AssembleIngredient } from "../../../helper/AssembleIngredient";
 import { IIngredient } from "../../../types";
 
-export default function RecipeIngredient(props: { ingredient: IIngredient }) {
+export default function BasketIngredient(props: { ingredient: IIngredient }) {
   
 
   return (

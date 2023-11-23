@@ -7,19 +7,19 @@ import {
 import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
-import { IRecipe } from "../../RecipesLib";
 import { AssetLib } from "../../AssetLib";
 import RecipeIngredientsList from "./recipeIngredients/RecipeIngredientsList";
 import Instructions from "./instructions/Instructions";
 import AddToBasket from "./addtobasket/AddToBasket";
 import { useContext } from "react";
-import { BasketItemContext } from "../../context/ContextProviders";
+import { BasketItemContext } from "../../context";
+import { IRecipe } from "../../types";
 
 export default function RecipeModal(props: {
   data: IRecipe;
   onClose: () => void;
 }) {
-  const { basketItems, setBasketItems } = useContext(BasketItemContext);
+  const { basketItems, addBasketItem } = useContext(BasketItemContext);
   
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>
@@ -70,7 +70,7 @@ export default function RecipeModal(props: {
           <Text style={styles.ingredientsTitle}>{"Anleitung"}</Text>
           <Instructions instructions={props.data.instructions}/>
           <AddToBasket onAdd={() => {
-            setBasketItems(basketItems.concat(props.data.ingredients))
+            addBasketItem(props.data);
           }}/>
         </ScrollView>
       </View>

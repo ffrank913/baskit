@@ -1,3 +1,5 @@
+import { IRecipe } from "./types";
+
 import acaibowl from "../assets/content/recipes/acaibowl.json";
 import burritos from "../assets/content/recipes/burritos.json";
 import butterchicken from "../assets/content/recipes/butterchicken.json";
@@ -12,21 +14,6 @@ import pumpkinsoup from "../assets/content/recipes/pumpkinsoup.json";
 import quiche from "../assets/content/recipes/quiche.json";
 import shakshuka from "../assets/content/recipes/shakshuka.json";
 import thaicurry from "../assets/content/recipes/thaicurry.json";
-
-export type IRecipe = {
-  id: string,
-  title: string,
-  image: string,
-  ingredients: IIngredient[],
-  description: string,
-  instructions: string[],
-}
-
-export type IIngredient = {
-  name: string,
-  count: number | null,
-  unit: string | null,
-}
 
 export const RecipesLib = {
   acaibowl: acaibowl,

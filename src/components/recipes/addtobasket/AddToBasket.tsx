@@ -1,8 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { IRecipe } from "../../../RecipesLib";
 import { Text } from "react-native-paper";
-import { useContext } from "react";
-import { BasketItemContext } from "../../../context/ContextProviders";
 
 export default function AddToBasket(props: { onAdd: () => void}) {
   return (
