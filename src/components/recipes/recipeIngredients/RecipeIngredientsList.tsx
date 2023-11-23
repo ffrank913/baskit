@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet } from "react-native";
-import { IIngredient } from "../../../RecipesLib";
 import RecipeIngredient from "./RecipeIngredient";
+import { IIngredient } from "../../../types";
 
 export default function RecipeIngredientsList(props: { ingredients: IIngredient[] }) {
   return (

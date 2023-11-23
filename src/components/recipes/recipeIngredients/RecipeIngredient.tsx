@@ -6,8 +6,6 @@ import { AssembleIngredient } from "../../../helper/AssembleIngredient";
 import { IIngredient } from "../../../types";
 
 export default function RecipeIngredient(props: { ingredient: IIngredient }) {
-  
-
   return (
     <View style={styles.container}>
       <Checkbox defaultValue={true}>

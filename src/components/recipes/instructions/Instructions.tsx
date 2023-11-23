@@ -33,9 +33,7 @@ export default function Instructions(props: { instructions: string[] }) {
       easing: Easing.linear,
       duration: 100,
       useNativeDriver: false,
-    }).start(() => {
-      console.log(rotationAnim);
-    });
+    }).start();
   }, [instructionsVisible]);
 
   const rotation = rotationAnim.interpolate({
