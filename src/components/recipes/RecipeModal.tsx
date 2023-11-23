@@ -67,7 +67,6 @@ export default function RecipeModal(props: {
           <Text style={styles.description}>{"Beschreibung: " + props.data.description}</Text>
           <Text style={styles.ingredientsTitle}>{"Zutaten"}</Text>
           <RecipeIngredientsList ingredients={props.data.ingredients}/>
-          <Text style={styles.ingredientsTitle}>{"Anleitung"}</Text>
           <Instructions instructions={props.data.instructions}/>
           <AddToBasket onAdd={() => {
             addBasketItem(props.data);
@@ -111,11 +110,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: "rgb(255,255,255)",
   },
-  instructionsTitle: {
-    marginTop: 16,
-    fontSize: 28,
-    color: "rgb(255,255,255)",
-  },
+  
   instructions: {
     margin: 6,
     color: "rgb(255,255,255)",

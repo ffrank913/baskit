@@ -24,4 +24,9 @@ export const AssetLib = {
         require("../assets/icons/edit.png")
       )
     : require("../assets/icons/edit.png"),
+    ArrowUp: isAndroid
+    ? Asset.fromModule(
+        require("../assets/icons/up-arrow.png")
+      )
+    : require("../assets/icons/up-arrow.png"),
 }
