@@ -3,18 +3,7 @@ import { Text } from "react-native-paper";
 import { TouchableOpacity, Image, StyleSheet, View } from "react-native";
 import { IIngredient } from "../../../RecipesLib";
 import Checkbox from "../../checkbox/Checkbox";
-
-export const AssembleIngredient = (ingredient: IIngredient): string => {
-  let text: string = ingredient.name;
-  if(ingredient.count) {
-    if(!ingredient.unit) {
-      text = ingredient.count + " " + ingredient.name;
-    } else {
-      text = ingredient.count + " " + ingredient.unit + " " + ingredient.name;
-    }
-  }
-  return text;
-}
+import { AssembleIngredient } from "../../../helper/AssembleIngredient";
 
 export default function RecipeIngredient(props: { ingredient: IIngredient }) {
   
