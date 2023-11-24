@@ -1,10 +1,11 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { BasketItemContext } from "./src/context";
 import Router from "./src/router/Router";
 import 'react-native-get-random-values';
 import { v4 } from 'uuid';
+import { RecipesLib } from "./src/RecipesLib";
 
 export default function App() {
   const [basketRecipes, setBasketRecipe] = useState([]);
@@ -29,6 +30,7 @@ export default function App() {
       itemIndex: index,
       checked: false,
       recipeId: recipeId,
+      id: v4(),
       markedAsDeleted: false,
     };
   };
@@ -60,6 +62,18 @@ export default function App() {
         basketIngredients["__CUSTOM__"].length
       )
     );
+  }, [basketIngredients]);
+
+  const modifyIngredient = useCallback((overwriteIngredient) => {
+    const copy = {...basketIngredients};
+    let ingr = copy[overwriteIngredient.recipeId].find((ingr) => ingr.id === overwriteIngredient.id);
+    const override = { ...ingr, ...overwriteIngredient };
+    ingr = override;
+    // console.log(ingr)
+    // const index = Object.keys(basketIngredients).map((key) => basketIngredients[key]).flat().findIndex((ingr) => ingr.id === overwriteIngredient);
+    // if(index === -1) return;
+
+    setBasketIngredients(copy)
   }, [basketIngredients]);
 
   const removeRecipe = useCallback((recipe) => {
@@ -116,10 +130,17 @@ export default function App() {
       basketIngredients: basketIngredients,
       addRecipe: addRecipe,
       addCustomIngredient: addIngredient,
+      modifyIngredient: modifyIngredient,
       removeRecipe: removeRecipe,
       removeCustomIngredient: removeIngredient,
     }
-  }, [basketRecipes, basketIngredients, addRecipe, addIngredient, removeRecipe, removeIngredient])
+  }, [basketRecipes, basketIngredients, addRecipe, addIngredient, modifyIngredient, removeRecipe, removeIngredient])
+
+
+  // TEST CODE HERE
+  useEffect(() => {
+    addRecipe(RecipesLib['shakshuka']);
+  }, [])
 
   return (
     <BasketItemContext.Provider

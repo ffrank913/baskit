@@ -7,6 +7,7 @@ export const BasketItemContext = createContext<{
   basketIngredients: { [key: string]: IBasketIngredient[]};
   addRecipe: (recipe: IRecipe) => void;
   addIngredient: (ingredient: IIngredient) => void;
+  modifyIngredient: (overwriteIngredient: IBasketIngredient) => void,
   removeRecipe: (recipe: IBasketRecipe) => void;
   removeIngredient: (recipe: IBasketIngredient) => void;
 }>({
@@ -14,6 +15,7 @@ export const BasketItemContext = createContext<{
   basketIngredients: {},
   addRecipe: () => {},
   addIngredient: () => {},
+  modifyIngredient: () => {},
   removeRecipe: () => {},
   removeIngredient: () => {},
 });

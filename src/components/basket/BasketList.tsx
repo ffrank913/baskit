@@ -4,34 +4,37 @@ import { Divider, Text } from "react-native-paper";
 import { IBasketIngredient, IIngredient } from "../../types";
 import BasketIngredient from "./basketIngredients/BasketIngedient";
 import { BasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
+import BasketListItemModal from "./BasketListItemModal";
 
 type ListItemsObject = {
   unchecked: IBasketIngredient[];
   divider: React.JSX.Element;
   checked: IBasketIngredient[];
+  deleted: IBasketIngredient[];
 };
 
 export default function BasketList() {
   const { basketIngredients } = useContext(BasketItemContext);
 
+  const [modalItem, setModalItem] = useState<IBasketIngredient | null>(null);
   const [itemChanged, setItemChanged] = useState<boolean>(false);
 
   const reduceItems = (items: IBasketIngredient[]): IBasketIngredient[] => {
     let reduced: IBasketIngredient[] = [];
 
-    items.forEach((newIngredient: IBasketIngredient) => {
+    items.forEach((item: IBasketIngredient) => {
       const existing = reduced.findIndex(
         (existingIngredient: IIngredient) =>
-          existingIngredient.name === newIngredient.name
+          existingIngredient.name === item.name
       );
       if (existing !== -1) {
-        if (reduced[existing].unit === newIngredient.unit) {
-          reduced[existing].count += newIngredient.count;
+        if (reduced[existing].unit === item.unit) {
+          reduced[existing].count += item.count;
         } else {
-          reduced.splice(existing, 0, {...newIngredient});
+          reduced.splice(existing, 0, { ...item });
         }
       } else {
-        reduced.push({...newIngredient});
+        reduced.push({ ...item });
       }
     });
 
@@ -41,24 +44,36 @@ export default function BasketList() {
   const assembleItems = (basketIngredients: {
     [key: string]: IBasketIngredient[];
   }): ListItemsObject => {
-
     const checkedItems = Object.keys(basketIngredients)
       .map((key: string) =>
         basketIngredients[key].filter(
-          (ingr: IBasketIngredient) => ingr.checked
+          (ingr: IBasketIngredient) => ingr.checked && !ingr.markedAsDeleted
         )
       )
       .flat();
     const uncheckedItems = Object.keys(basketIngredients)
       .map((key: string) =>
-        basketIngredients[key].filter((ingr: IBasketIngredient) => !ingr.checked)
+        basketIngredients[key].filter(
+          (ingr: IBasketIngredient) => !ingr.checked && !ingr.markedAsDeleted
+        )
       )
       .flat();
 
+    const deletedItems = Object.keys(basketIngredients)
+      .map((key: string) =>
+        basketIngredients[key].filter(
+          (ingr: IBasketIngredient) => ingr.markedAsDeleted
+        )
+      )
+      .flat();
+          console.log(deletedItems);
     return {
       unchecked: reduceItems(uncheckedItems),
-      divider: items?.divider || <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>,
+      divider: items?.divider || (
+        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+      ),
       checked: reduceItems(checkedItems),
+      deleted: reduceItems(deletedItems),
     };
   };
 
@@ -66,26 +81,32 @@ export default function BasketList() {
     assembleItems(basketIngredients)
   );
 
-  useEffect(() => {    
+  useEffect(() => {
     setItems(assembleItems(basketIngredients));
-  }, [basketIngredients])
+  }, [basketIngredients]);
 
   useEffect(() => {
     if (!itemChanged) return;
     const assembled = assembleItems(basketIngredients);
-  
+
     setItems({
-      unchecked: reduceItems(assembled.unchecked),
+      unchecked: assembled.unchecked,
+      checked: assembled.checked,
+      deleted: assembled.deleted,
       divider: items.divider,
-      checked: reduceItems(assembled.checked),
     });
     setItemChanged(false);
   }, [itemChanged]);
 
   const setItemChecked = (item: IBasketIngredient, checked: boolean) => {
-    const list = Object.keys(basketIngredients).map((key: string) => basketIngredients[key]).flat().filter((ingr: IBasketIngredient) => ingr.name === item.name);
+    const list = Object.keys(basketIngredients)
+      .map((key: string) => basketIngredients[key])
+      .flat()
+      .filter((ingr: IBasketIngredient) => ingr.name === item.name);
     if (list.length === 0) return;
-    list.forEach((ingr: IBasketIngredient) => { ingr.checked = checked });    
+    list.forEach((ingr: IBasketIngredient) => {
+      ingr.checked = checked;
+    });
     setItemChanged(true);
   };
 
@@ -101,25 +122,31 @@ export default function BasketList() {
           <FlatList
             data={[
               ...items.unchecked,
-              { name: "divider" } as IBasketIngredient,
+              { name: "divider", id: "divider0" } as IBasketIngredient,
               ...items.checked,
+              { name: "divider", id: "divider1" } as IBasketIngredient,
+              ...items.deleted,
             ]}
             renderItem={({ item }) => (
               <>
-                {items.checked.length > 0 && item.name === "divider" && (
-                  items.divider
-                )}
+                {items.checked.length > 0 || items.deleted.length > 0 &&
+                  item.name === "divider" &&
+                  items.divider}
                 {item.name !== "divider" && (
                   <BasketIngredient
+                    disabled={item.markedAsDeleted}
                     onCheckChanged={(checked: boolean) => {
                       setItemChecked(item, checked);
+                    }}
+                    onLongPress={() => {
+                      setModalItem(item);
                     }}
                     ingredient={item}
                   />
                 )}
               </>
             )}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id}
           />
         </View>
       )}
@@ -131,15 +158,14 @@ export default function BasketList() {
         </View>
       )}
 
-      {/* {activeRecipe && (
-          // <RecipeModal
-          //   data={RecipesLib[activeRecipe]}
-          //   onClose={() => {
-          //     setActiveRecipe(null);
-          //   }}
-          // ></RecipeModal>
-          <></>
-        )} */}
+      {modalItem && (
+        <BasketListItemModal
+          item={modalItem}
+          onClose={() => {
+            setModalItem(null);
+          }}
+        ></BasketListItemModal>
+      )}
     </View>
   );
 }

@@ -5,27 +5,33 @@ import { AssetLib } from "../../AssetLib";
 export default function Checkbox(props: {
   children,
   defaultValue: boolean;
+  disabled: boolean,
   tintColor?: ColorValue;
   onValueChanged?: (checked: boolean) => void;
+  onLongPress?: () => void;
 }) {
   const [checked, setChecked] = useState<boolean>(props.defaultValue);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.checkbox}
+        style={styles.checkbox }
         onPress={() => {
+          if(props.disabled) return;
           setChecked(!checked);
           if(props.onValueChanged) props.onValueChanged(!checked);
         }}
+        onLongPress={() => {
+          if(props.onLongPress) props.onLongPress();
+        }}
       >
         <Image
-          style={{ width: 28, height: 28, tintColor: props.tintColor }}
+          style={{ width: 28, height: 28, tintColor: props.disabled ? 'rgba(200, 200, 200, 0.8)' : props.tintColor }}
           source={AssetLib.Unchecked}
         ></Image>
         {checked && (
           <Image
-            style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, tintColor: props.tintColor}}
+            style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, tintColor: props.disabled ? 'rgba(200, 200, 200, 0.8)' : props.tintColor}}
             source={AssetLib.Check}
           ></Image>
         )}
