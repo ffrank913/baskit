@@ -67,12 +67,7 @@ export default function App() {
   const modifyIngredient = useCallback((overwriteIngredient) => {
     const copy = {...basketIngredients};
     let ingr = copy[overwriteIngredient.recipeId].find((ingr) => ingr.id === overwriteIngredient.id);
-    const override = { ...ingr, ...overwriteIngredient };
-    ingr = override;
-    // console.log(ingr)
-    // const index = Object.keys(basketIngredients).map((key) => basketIngredients[key]).flat().findIndex((ingr) => ingr.id === overwriteIngredient);
-    // if(index === -1) return;
-
+    ingr = { ...ingr, ...overwriteIngredient };
     setBasketIngredients(copy)
   }, [basketIngredients]);
 

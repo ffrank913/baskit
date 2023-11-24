@@ -66,7 +66,6 @@ export default function BasketList() {
         )
       )
       .flat();
-          console.log(deletedItems);
     return {
       unchecked: reduceItems(uncheckedItems),
       divider: items?.divider || (
