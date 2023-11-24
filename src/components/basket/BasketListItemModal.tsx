@@ -170,7 +170,7 @@ export default function BasketListItemModal(props: {
               }}
             >
               <View>
-                <Text style={styles.deleteTitle}>Löschen</Text>
+                <Text style={styles.deleteTitle}>Änderungen</Text>
                 <Text style={styles.deleteText}>
                   {objectToDelete.markedAsDeleted
                     ? "Möchtest du " +
@@ -197,7 +197,7 @@ export default function BasketListItemModal(props: {
                   <Text style={styles.buttonText}>Abbrechen </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.button}
+                  style={{...styles.button, backgroundColor: objectToDelete.markedAsDeleted ? "rgba(40, 150, 40, 0.8)" : "rgba(150, 40, 40, 0.8)",}}
                   onPress={() => {
                     changeDeleteStatus(
                       objectToDelete,
