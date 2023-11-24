@@ -1,7 +1,19 @@
 import { createContext } from "react";
-import { IRecipe } from "../../types";
+import { IBasketIngredient, IIngredient, IRecipe } from "../../types";
+import { IBasketRecipe } from "../../types/IBasketRecipe.types";
 
 export const BasketItemContext = createContext<{
-  basketItems: (IRecipe)[];
-  addBasketItem: (basketItem: IRecipe) => void;
-}>(null);
+  basketRecipes: IRecipe[];
+  basketIngredients: { [key: string]: IBasketIngredient[]};
+  addRecipe: (recipe: IRecipe) => void;
+  addIngredient: (ingredient: IIngredient) => void;
+  removeRecipe: (recipe: IBasketRecipe) => void;
+  removeIngredient: (recipe: IBasketIngredient) => void;
+}>({
+  basketRecipes: [],
+  basketIngredients: {},
+  addRecipe: () => {},
+  addIngredient: () => {},
+  removeRecipe: () => {},
+  removeIngredient: () => {},
+});

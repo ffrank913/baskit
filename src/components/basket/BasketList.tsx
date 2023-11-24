@@ -1,84 +1,92 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { BasketItemContext } from "../../context";
-import { AssembleIngredient } from "../../helper/AssembleIngredient";
-import { IBasketIngredient, IIngredient, IRecipe } from "../../types";
+import { IBasketIngredient, IIngredient } from "../../types";
 import BasketIngredient from "./basketIngredients/BasketIngedient";
+import { BasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 
-
+type ListItemsObject = {
+  unchecked: IBasketIngredient[];
+  divider: React.JSX.Element;
+  checked: IBasketIngredient[];
+};
 
 export default function BasketList() {
-  const { basketItems } = useContext(BasketItemContext);
+  const { basketIngredients } = useContext(BasketItemContext);
 
-  const [uncheckedItems, setUncheckedItems] = useState<IBasketIngredient[]>([]);
-  const [checkedItems, setCheckedItems] = useState<IBasketIngredient[]>([]);
+  const [itemChanged, setItemChanged] = useState<boolean>(false);
 
-  useMemo(() => {
-    basketItems.forEach((basketItemrecipe: IRecipe) => {
-      basketItemrecipe.ingredients.forEach((newIngredient: IIngredient) => {
-        const existing = uncheckedItems.findIndex(
-          (existingIngredient: IBasketIngredient) =>
-            existingIngredient.name === newIngredient.name
-        );
-        if (existing !== -1) {
-          if (uncheckedItems[existing].unit === newIngredient.unit) {
-            uncheckedItems[existing].count += newIngredient.count;
-          } else {
-            uncheckedItems.splice(existing, 0, {
-              ...newIngredient,
-              index: existing + 1,
-              checked: false,
-            });
-          }
+  const reduceItems = (items: IBasketIngredient[]): IBasketIngredient[] => {
+    let reduced: IBasketIngredient[] = [];
+
+    items.forEach((newIngredient: IBasketIngredient) => {
+      const existing = reduced.findIndex(
+        (existingIngredient: IIngredient) =>
+          existingIngredient.name === newIngredient.name
+      );
+      if (existing !== -1) {
+        if (reduced[existing].unit === newIngredient.unit) {
+          reduced[existing].count += newIngredient.count;
         } else {
-          uncheckedItems.push({
-            ...newIngredient,
-            checked: false,
-            index: uncheckedItems.length,
-          });
+          reduced.splice(existing, 0, {...newIngredient});
         }
-      });
+      } else {
+        reduced.push({...newIngredient});
+      }
     });
-  }, [basketItems]);
 
-  const checkItem = (name: string) => {
-    const index = uncheckedItems.findIndex(
-      (unchecked: IBasketIngredient) => unchecked.name === name
-    );
-    if (index === -1) {
-      console.warn("Invalid item index, aborting check...");
-      return;
-    } else {
-      let spliced = uncheckedItems.splice(index, 1);
-      spliced[0].checked = true;
-      setCheckedItems([...checkedItems, ...spliced]);
-    }
-  }
+    return reduced;
+  };
 
-  const uncheckItem = (name: string) => {
-    const index = checkedItems.findIndex(
-      (checked: IBasketIngredient) => checked.name === name
-    );
-    if (index === -1) {
-      console.warn("Invalid item index, aborting uncheck...");
-      return;
-    } else {
-      let spliced = checkedItems.splice(index, 1);
-      spliced[0].checked = false;
-      setUncheckedItems([
-        ...uncheckedItems,
-        ...spliced,
-      ]);
-    }
-  }
+  const assembleItems = (basketIngredients: {
+    [key: string]: IBasketIngredient[];
+  }): ListItemsObject => {
 
-  const itemCheckChanged = (name: string, checked: boolean) => {
-    if (checked) {
-      uncheckItem(name);
-    } else {
-      checkItem(name);
-    }
+    const checkedItems = Object.keys(basketIngredients)
+      .map((key: string) =>
+        basketIngredients[key].filter(
+          (ingr: IBasketIngredient) => ingr.checked
+        )
+      )
+      .flat();
+    const uncheckedItems = Object.keys(basketIngredients)
+      .map((key: string) =>
+        basketIngredients[key].filter((ingr: IBasketIngredient) => !ingr.checked)
+      )
+      .flat();
+
+    return {
+      unchecked: reduceItems(uncheckedItems),
+      divider: items?.divider || <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>,
+      checked: reduceItems(checkedItems),
+    };
+  };
+
+  const [items, setItems] = useState<ListItemsObject>(
+    assembleItems(basketIngredients)
+  );
+
+  useEffect(() => {    
+    setItems(assembleItems(basketIngredients));
+  }, [basketIngredients])
+
+  useEffect(() => {
+    if (!itemChanged) return;
+    const assembled = assembleItems(basketIngredients);
+  
+    setItems({
+      unchecked: reduceItems(assembled.unchecked),
+      divider: items.divider,
+      checked: reduceItems(assembled.checked),
+    });
+    setItemChanged(false);
+  }, [itemChanged]);
+
+  const setItemChecked = (item: IBasketIngredient, checked: boolean) => {
+    const list = Object.keys(basketIngredients).map((key: string) => basketIngredients[key]).flat().filter((ingr: IBasketIngredient) => ingr.name === item.name);
+    if (list.length === 0) return;
+    list.forEach((ingr: IBasketIngredient) => { ingr.checked = checked });    
+    setItemChanged(true);
   };
 
   return (
@@ -88,23 +96,27 @@ export default function BasketList() {
       </View>
 
       {/* unchecked items are rendered at the top, checked items are rendered at the bottom */}
-      {[...uncheckedItems, ...checkedItems].length > 0 && (
+      {[...items.unchecked, ...items.checked].length > 0 && (
         <View style={styles.listContainer}>
           <FlatList
             data={[
-              ...uncheckedItems.sort((a, b) => (a.index < b.index ? 1 : -1)),
-              { index: -1, name: 'divider' } as IBasketIngredient,
-              ...checkedItems.sort((a, b) => (a.index < b.index ? 1 : -1)),
+              ...items.unchecked,
+              { name: "divider" } as IBasketIngredient,
+              ...items.checked,
             ]}
             renderItem={({ item }) => (
               <>
-                { ( checkedItems.length > 0 && item.index === -1 && <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>) }
-                { (item.index > -1 && <BasketIngredient
-                  onCheckChanged={(checked: boolean) => {
-                    itemCheckChanged(item.name, checked);
-                  }}
-                  ingredient={item}
-                />) }
+                {items.checked.length > 0 && item.name === "divider" && (
+                  items.divider
+                )}
+                {item.name !== "divider" && (
+                  <BasketIngredient
+                    onCheckChanged={(checked: boolean) => {
+                      setItemChecked(item, checked);
+                    }}
+                    ingredient={item}
+                  />
+                )}
               </>
             )}
             keyExtractor={(item) => item.name}
@@ -113,7 +125,7 @@ export default function BasketList() {
       )}
 
       {/* if list is empty show empty container */}
-      {uncheckedItems.length === 0 && checkedItems.length === 0 && (
+      {items.unchecked.length === 0 && items.checked.length === 0 && (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}> Keine Einträge </Text>
         </View>

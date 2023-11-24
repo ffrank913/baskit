@@ -1,14 +1,10 @@
-import { useMemo, useState } from "react";
 import { Text } from "react-native-paper";
-import { TouchableOpacity, Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Checkbox from "../../checkbox/Checkbox";
 import { AssembleIngredient } from "../../../helper/AssembleIngredient";
-import { IBasketIngredient, IIngredient } from "../../../types";
+import { IBasketIngredient } from "../../../types";
 
 export default function BasketIngredient(props: { ingredient: IBasketIngredient, onCheckChanged: (checked: boolean) => void}) {  
-  
-  console.log(props.ingredient.name, props.ingredient.checked)
-
   return (
     <View style={styles.container}>
       <Checkbox defaultValue={false} tintColor={ props.ingredient.checked ? 'rgb(150, 150, 150)' : 'black' } onValueChanged={(checked: boolean) => {

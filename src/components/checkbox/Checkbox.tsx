@@ -16,7 +16,7 @@ export default function Checkbox(props: {
         style={styles.checkbox}
         onPress={() => {
           setChecked(!checked);
-          if(props.onValueChanged) props.onValueChanged(checked);
+          if(props.onValueChanged) props.onValueChanged(!checked);
         }}
       >
         <Image

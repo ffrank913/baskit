@@ -9,9 +9,6 @@ export default function AddToBasket(props: { onAdd: () => void}) {
       }}>
         <Text style={styles.text}>Add To Basket </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.text}>Edit </Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -21,6 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     flexDirection: "row",
+    marginBottom: 8, 
   },
   button: {
     flex: 1,

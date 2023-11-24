@@ -19,6 +19,5 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     margin: 8,
-    marginBottom: 32, 
   },
 });

@@ -19,7 +19,7 @@ export default function RecipeModal(props: {
   data: IRecipe;
   onClose: () => void;
 }) {
-  const { basketItems, addBasketItem } = useContext(BasketItemContext);
+  const { addRecipe } = useContext(BasketItemContext);
   
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>
@@ -67,10 +67,10 @@ export default function RecipeModal(props: {
           <Text style={styles.description}>{"Beschreibung: " + props.data.description}</Text>
           <Text style={styles.ingredientsTitle}>{"Zutaten"}</Text>
           <RecipeIngredientsList ingredients={props.data.ingredients}/>
-          <Instructions instructions={props.data.instructions}/>
           <AddToBasket onAdd={() => {
-            addBasketItem(props.data);
+            addRecipe(props.data);
           }}/>
+          <Instructions instructions={props.data.instructions}/>
         </ScrollView>
       </View>
     </View>
