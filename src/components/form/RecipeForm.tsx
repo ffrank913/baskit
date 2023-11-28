@@ -3,21 +3,18 @@ import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
 import { AssetLib } from "../../AssetLib";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RecipeFormIngredientsList from "./RecipeFormIngredientsList";
 import RecipeFormInstructions from "./RecipeFormInstructions";
 import AddRecipe from "./AddRecipe";
-import { IIngredient, IRecipe } from "../../types";
+import { IIngredient } from "../../types";
 import RecipeFormTitle from "./RecipeFormTitle";
 import RecipeFormDescription from "./RecipeFormDescription";
-import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 import useDBInsert from "../../context/database/hooks/useDBInsert";
-import useDBQuery from "../../context/database/hooks/useDBQuery";
+import { ToDBRecipe } from "../../helper/ToDBRecipe";
 
-export default function RecipeForm(props: { onClose: () => void }) {
-  const { addRecipe } = useBasketItemContext();
+export default function RecipeForm(props: { onClose: (changed: boolean) => void }) {
   const insertRecipe = useDBInsert('recipes');
-  const queryRecipes = useDBQuery('recipes');
   
   const [titleValue, setTitleValue] = useState<string>("");
   const [imageUri, setImageUri] = useState<string | null>(null);
@@ -25,15 +22,15 @@ export default function RecipeForm(props: { onClose: () => void }) {
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
   
-  const addRecipeToDatabase = async () => {
-    const recipe = {
+  const addRecipeToDB = async () => {
+    const dbRecipe = ToDBRecipe({
       title: titleValue,
       image: imageUri || "Default",
-      ingredients: JSON.stringify(ingredients),
+      ingredients: ingredients,
       description: descriptionValue,
-      instructions: JSON.stringify(instructions),
-    }
-    await insertRecipe(Object.keys(recipe), Object.values(recipe));
+      instructions: instructions,
+    });
+    await insertRecipe(Object.keys(dbRecipe), Object.values(dbRecipe));
   }
 
   return (
@@ -56,28 +53,12 @@ export default function RecipeForm(props: { onClose: () => void }) {
                 zIndex: 1,
               }}
               onPress={() => {
-                props.onClose();
+                props.onClose(false);
               }}
             >
               <Image
                 style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
                 source={AssetLib.Cross}
-              ></Image>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: 48,
-                height: 48,
-                marginLeft: 16,
-                zIndex: 1,
-              }}
-              onPress={() => {
-                props.onClose();
-              }}
-            >
-              <Image
-                style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
-                source={AssetLib.Edit}
               ></Image>
             </TouchableOpacity>
           </View>
@@ -104,10 +85,12 @@ export default function RecipeForm(props: { onClose: () => void }) {
             setInstructions={setInstructions}
           ></RecipeFormInstructions>
           <AddRecipe
-            onCancel={() => {}}
-            onConfirm={() => {
-              addRecipeToDatabase();
-              props.onClose();
+            onCancel={() => {
+              props.onClose(false);
+            }}
+            onConfirm={async () => {
+              await addRecipeToDB();
+              props.onClose(true);
             }}
           ></AddRecipe>
         </ScrollView>

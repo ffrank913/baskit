@@ -6,7 +6,7 @@ export default function Basket() {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Basket</Text>
+        <Text style={styles.title}>Baskit</Text>
       </View>
         <BasketList></BasketList>
     </View>

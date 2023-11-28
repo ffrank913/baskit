@@ -5,9 +5,7 @@ const isAndroid = Platform.OS === "android";
 
 export const ImageLib = {
   Default: isAndroid
-    ? Asset.fromModule(
-        require("../assets/images/default.png")
-      )
+    ? Asset.fromModule(require("../assets/images/default.png"))
     : require("../assets/images/default.png"),
   Shakshuka: isAndroid
     ? Asset.fromModule(

@@ -1,3 +1,3 @@
-import { BasketItemContextProvider } from "./basketItems/BasketItemsContextProvider";
+import { DBContextProvider } from "./database/DBContextProvider";
 
-export { BasketItemContextProvider };
+export { DBContextProvider };

@@ -8,12 +8,12 @@ export default function AddRecipe(props: { onConfirm: () => void, onCancel: () =
       <TouchableOpacity style={{...styles.button, backgroundColor: "rgba(150, 40, 40, 0.8)" }} onPress={() => {
         props.onCancel();
       }}>
-        <Text style={styles.text}>CANCEL</Text>
+        <Text style={styles.text}>Rezept Verwerfen</Text>
       </TouchableOpacity>
       <TouchableOpacity style={{...styles.button, backgroundColor: "rgba(40, 150, 40, 0.8)" }} onPress={() => {
         props.onConfirm();
       }}>
-        <Text style={styles.text}>Add Recipe</Text>
+        <Text style={styles.text}>Rezept hinzufügen</Text>
       </TouchableOpacity>
     </View>
   );

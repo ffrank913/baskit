@@ -11,14 +11,21 @@ import { AssetLib } from "../../../AssetLib";
 import RecipeIngredientsList from "../recipeIngredients/RecipeIngredientsList";
 import Instructions from "../instructions/Instructions";
 import AddToBasket from "../addtobasket/AddToBasket";
-import { IRecipe } from "../../../types";
+import { IBaskitRecipe } from "../../../types";
 import { useBasketItemContext } from "../../../context/basketItems/BasketItemsContextProvider";
+import useDBRemove from "../../../context/database/hooks/useDBRemove";
 
 export default function RecipeModal(props: {
-  data: IRecipe;
-  onClose: () => void;
+  data: IBaskitRecipe;
+  onClose: (changed: boolean) => void;
 }) {
   const { addRecipe } = useBasketItemContext();
+
+  const removeRecipe = useDBRemove('recipes');
+
+  const removeRecipeFromDB = async () => {
+    await removeRecipe({ field: "id", conditional: "=", value: props.data.id });
+  }
   
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>
@@ -36,7 +43,7 @@ export default function RecipeModal(props: {
                 zIndex: 1,
               }}
               onPress={() => {
-                props.onClose();
+                props.onClose(false);
               }}
             >
               <Image
@@ -52,12 +59,29 @@ export default function RecipeModal(props: {
               zIndex: 1,
             }}
             onPress={() => {
-              props.onClose();
+              console.log("Edit here!");
             }}
           >
             <Image
               style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
               source={AssetLib.Edit}
+            ></Image>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: 48,
+              height: 48,
+              marginLeft: 16,
+              zIndex: 1,
+            }}
+            onPress={async () => {
+              await removeRecipeFromDB();
+              props.onClose(true);
+            }}
+          >
+            <Image
+              style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
+              source={AssetLib.Trash}
             ></Image>
           </TouchableOpacity>
           </View>
