@@ -6,14 +6,14 @@ import {
 } from "react-native";
 import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
-import { ImageLib } from "../../ImageLib";
-import { AssetLib } from "../../AssetLib";
-import RecipeIngredientsList from "./recipeIngredients/RecipeIngredientsList";
-import Instructions from "./instructions/Instructions";
-import AddToBasket from "./addtobasket/AddToBasket";
+import { ImageLib } from "../../../ImageLib";
+import { AssetLib } from "../../../AssetLib";
+import RecipeIngredientsList from "../recipeIngredients/RecipeIngredientsList";
+import Instructions from "../instructions/Instructions";
+import AddToBasket from "../addtobasket/AddToBasket";
 import { useContext } from "react";
-import { BasketItemContext } from "../../context";
-import { IRecipe } from "../../types";
+import { BasketItemContext } from "../../../context";
+import { IRecipe } from "../../../types";
 
 export default function RecipeModal(props: {
   data: IRecipe;
@@ -29,21 +29,21 @@ export default function RecipeModal(props: {
               height: 44,
               flexDirection: "row-reverse"
             }}>
-          <TouchableOpacity
-            style={{
-              width: 44,
-              height: 44,
-              marginLeft: 16,
-              zIndex: 1,
-            }}
-            onPress={() => {
-              props.onClose();
-            }}
-          >
-            <Image
-              style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
-              source={AssetLib.Cross}
-            ></Image>
+            <TouchableOpacity
+              style={{
+                width: 44,
+                height: 44,
+                marginLeft: 16,
+                zIndex: 1,
+              }}
+              onPress={() => {
+                props.onClose();
+              }}
+            >
+              <Image
+                style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
+                source={AssetLib.Cross}
+              ></Image>
           </TouchableOpacity>
           <TouchableOpacity
             style={{

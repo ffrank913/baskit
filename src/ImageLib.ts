@@ -4,6 +4,11 @@ import { Platform } from "react-native";
 const isAndroid = Platform.OS === "android";
 
 export const ImageLib = {
+  Default: isAndroid
+    ? Asset.fromModule(
+        require("../assets/images/default.png")
+      )
+    : require("../assets/images/default.png"),
   Shakshuka: isAndroid
     ? Asset.fromModule(
         require("../assets/images/778577_shakshukalikeonafoodblog_xl-1024-v1-0.png")

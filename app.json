@@ -21,7 +21,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/app/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#eb6b96"
       },
       "package": "com.ffrank.baskit"
     },

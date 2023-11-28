@@ -4,13 +4,16 @@ import { FlatList, StyleSheet, View } from "react-native";
 import RecipeButton from "../../components/recipes/RecipeButton";
 import { RecipesLib } from "../../RecipesLib";
 import { useState } from "react";
-import RecipeModal from "../../components/recipes/RecipeModal";
+import RecipeModal from "../../components/recipes/recipemodal/RecipeModal";
+import FixedButton from "../../components/fixedbutton/FixedButton";
+import RecipeForm from "../../components/form/RecipeForm";
+import { IRecipe } from "../../types";
 
 export default function Recipes() {
-  const recipeIDs = Object.keys(RecipesLib);
-  const recipesArray = recipeIDs.map((key: string) => RecipesLib[key]);
+  const recipesArray = Object.keys(RecipesLib).map((key: string) => RecipesLib[key]);
 
-  const [activeRecipe, setActiveRecipe] = useState<string | null>(null);
+  const [activeRecipe, setActiveRecipe] = useState<IRecipe | null>(null);
+  const [isAddingRecipe, setIsAddingRecipe] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
@@ -18,24 +21,34 @@ export default function Recipes() {
         data={recipesArray}
         renderItem={({ item }) => (
           <RecipeButton
-            title={item.title}
-            image={item.image}
-            onPress={() => {
-              setActiveRecipe(item.id);
-            }}
-            description={item.description}
+          title={item.title}
+          image={item.image}
+          onPress={() => {
+            setActiveRecipe(item);
+          }}
+          description={item.description}
           ></RecipeButton>
-        )}
-        keyExtractor={(item) => item.id}
+          )}
+        keyExtractor={(item) => item.title}
       />
+      <FixedButton onPress={() => {
+        setIsAddingRecipe(true);
+      }}></FixedButton>
       {activeRecipe && (
         <RecipeModal
-          data={RecipesLib[activeRecipe]}
-          onClose={() => {
-            setActiveRecipe(null);
-          }}
+        data={activeRecipe}
+        onClose={() => {
+          setActiveRecipe(null);
+        }}
         ></RecipeModal>
-      )}
+        )}
+      {isAddingRecipe && (
+        <RecipeForm
+        onClose={() => {
+          setIsAddingRecipe(false);
+        }}
+        ></RecipeForm>
+        )}
     </View>
   );
 }

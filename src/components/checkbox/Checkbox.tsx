@@ -6,6 +6,7 @@ export default function Checkbox(props: {
   children,
   defaultValue: boolean;
   disabled: boolean,
+  hidden?: boolean
   tintColor?: ColorValue;
   onValueChanged?: (checked: boolean) => void;
   onLongPress?: () => void;
@@ -15,7 +16,8 @@ export default function Checkbox(props: {
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.checkbox }
+        disabled={props.disabled}
+        style={ styles.checkbox }
         onPress={() => {
           if(props.disabled) return;
           setChecked(!checked);
@@ -26,14 +28,19 @@ export default function Checkbox(props: {
         }}
       >
         <Image
-          style={{ width: 28, height: 28, tintColor: props.disabled ? 'rgba(200, 200, 200, 0.8)' : props.tintColor }}
+          style={{ width: 28, height: 28, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor }}
           source={AssetLib.Unchecked}
         ></Image>
         {checked && (
           <Image
-            style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, tintColor: props.disabled ? 'rgba(200, 200, 200, 0.8)' : props.tintColor}}
+            style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor}}
             source={AssetLib.Check}
           ></Image>
+        )}
+        {props.hidden && (
+          <View
+            style={{ width: 28, height: 28 }}
+          ></View>
         )}
         {props.children}
       </TouchableOpacity>

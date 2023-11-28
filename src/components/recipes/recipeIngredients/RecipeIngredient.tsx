@@ -8,7 +8,7 @@ import { IIngredient } from "../../../types";
 export default function RecipeIngredient(props: { ingredient: IIngredient }) {
   return (
     <View style={styles.container}>
-      <Checkbox defaultValue={true}>
+      <Checkbox disabled={false} defaultValue={true}>
         <Text style={styles.text}>{AssembleIngredient(props.ingredient)}</Text>
       </Checkbox>
     </View>

@@ -129,13 +129,12 @@ export default function App() {
       removeRecipe: removeRecipe,
       removeCustomIngredient: removeIngredient,
     }
-  }, [basketRecipes, basketIngredients, addRecipe, addIngredient, modifyIngredient, removeRecipe, removeIngredient])
+  }, [basketRecipes, basketIngredients, addRecipe, addIngredient, modifyIngredient, removeRecipe, removeIngredient]);
 
-
-  // TEST CODE HERE
-  useEffect(() => {
-    addRecipe(RecipesLib['shakshuka']);
-  }, [])
+  // // TEST CODE HERE
+  // useEffect(() => {
+  //   addRecipe(RecipesLib['shakshuka']);
+  // }, [])
 
   return (
     <BasketItemContext.Provider
