@@ -11,15 +11,14 @@ import { AssetLib } from "../../../AssetLib";
 import RecipeIngredientsList from "../recipeIngredients/RecipeIngredientsList";
 import Instructions from "../instructions/Instructions";
 import AddToBasket from "../addtobasket/AddToBasket";
-import { useContext } from "react";
-import { BasketItemContext } from "../../../context";
 import { IRecipe } from "../../../types";
+import { useBasketItemContext } from "../../../context/basketItems/BasketItemsContextProvider";
 
 export default function RecipeModal(props: {
   data: IRecipe;
   onClose: () => void;
 }) {
-  const { addRecipe } = useContext(BasketItemContext);
+  const { addRecipe } = useBasketItemContext();
   
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>

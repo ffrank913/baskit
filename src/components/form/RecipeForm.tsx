@@ -1,28 +1,19 @@
-import {
-  StyleSheet,
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
 import { AssetLib } from "../../AssetLib";
-import RecipeIngredientsList from "../recipes/recipeIngredients/RecipeIngredientsList";
-import Instructions from "../recipes/instructions/Instructions";
-import AddToBasket from "../recipes/addtobasket/AddToBasket";
-import { useContext, useState } from "react";
-import { BasketItemContext } from "../../context";
+import { useState } from "react";
 import RecipeFormIngredientsList from "./RecipeFormIngredientsList";
 import RecipeFormInstructions from "./RecipeFormInstructions";
 import AddRecipe from "./AddRecipe";
-import { IIngredient, IRecipe } from "../../types";
+import { IIngredient } from "../../types";
 import RecipeFormTitle from "./RecipeFormTitle";
 import RecipeFormDescription from "./RecipeFormDescription";
+import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 
 export default function RecipeForm(props: { onClose: () => void }) {
-  const { addRecipe } = useContext(BasketItemContext);
+  const { addRecipe } = useBasketItemContext();
 
   const [titleValue, setTitleValue] = useState<string>("");
   const [imageUri, setImageUri] = useState<string | null>(null);

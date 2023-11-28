@@ -6,21 +6,19 @@ import {
   FlatList,
 } from "react-native";
 import { Text } from "react-native-paper";
-import { ScrollView } from "react-native-virtualized-view";
-import { ImageLib } from "../../ImageLib";
 import { AssetLib } from "../../AssetLib";
-import { useContext, useState } from "react";
-import { BasketItemContext } from "../../context";
-import { IBasketIngredient, IIngredient } from "../../types";
+import { useState } from "react";
+import { IBasketIngredient } from "../../types";
 import { AssembleIngredient } from "../../helper/AssembleIngredient";
 import { IBasketRecipe } from "../../types/IBasketRecipe.types";
+import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 
 export default function BasketListItemModal(props: {
   item: IBasketIngredient;
   onClose: () => void;
 }) {
-  const { basketIngredients, basketRecipes, modifyIngredient } =
-    useContext(BasketItemContext);
+  const { basketIngredients, basketRecipes, modifyCustomIngredient } =
+    useBasketItemContext();
 
   const [objectToDelete, setObjectToDelete] =
     useState<IBasketIngredient | null>(null);
@@ -46,7 +44,7 @@ export default function BasketListItemModal(props: {
     markAsDeleted: boolean
   ) => {
     objectToDelete.markedAsDeleted = markAsDeleted;
-    modifyIngredient(objectToDelete);
+    modifyCustomIngredient(objectToDelete);
     // throw new Error("Function not implemented.");
   };
 

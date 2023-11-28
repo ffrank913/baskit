@@ -3,7 +3,7 @@ import { FlatList, View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { IBasketIngredient, IIngredient } from "../../types";
 import BasketIngredient from "./basketIngredients/BasketIngedient";
-import { BasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
+import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 import BasketListItemModal from "./BasketListItemModal";
 
 type ListItemsObject = {
@@ -14,7 +14,7 @@ type ListItemsObject = {
 };
 
 export default function BasketList() {
-  const { basketIngredients } = useContext(BasketItemContext);
+  const { basketIngredients } = useBasketItemContext()
 
   const [modalItem, setModalItem] = useState<IBasketIngredient | null>(null);
   const [itemChanged, setItemChanged] = useState<boolean>(false);
