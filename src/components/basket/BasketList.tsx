@@ -8,9 +8,11 @@ import { useBasketItemContext } from "../../context/basketItems/BasketItemsConte
 
 type ListItemsObject = {
   unchecked: IBaskitIngredient[];
-  divider: React.JSX.Element;
   checked: IBaskitIngredient[];
   deleted: IBaskitIngredient[];
+  uncheckedDivider: React.JSX.Element;
+  checkedDivider: React.JSX.Element;
+  deletedDivider: React.JSX.Element;
 };
 
 export default function BasketList() {
@@ -68,11 +70,26 @@ export default function BasketList() {
       .flat();
     return {
       unchecked: reduceItems(uncheckedItems),
-      divider: items?.divider || (
-        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
-      ),
       checked: reduceItems(checkedItems),
       deleted: reduceItems(deletedItems),
+      uncheckedDivider: items?.uncheckedDivider || (
+        <View>
+          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+          <Text style={{ color: "grey" }}>Offen</Text>
+        </View>
+      ),
+      checkedDivider: items?.checkedDivider || (
+        <View>
+          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+          <Text style={{ color: "grey" }}>Erledigt</Text>
+        </View>
+      ),
+      deletedDivider: items?.deletedDivider || (
+        <View>
+          <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+          <Text style={{ color: "grey" }}>Gelöscht</Text>
+        </View>
+      ),
     };
   };
 
@@ -81,6 +98,7 @@ export default function BasketList() {
   );
 
   useEffect(() => {
+    console.log(basketIngredients);
     setItems(assembleItems(basketIngredients));
   }, [basketIngredients]);
 
@@ -92,7 +110,9 @@ export default function BasketList() {
       unchecked: assembled.unchecked,
       checked: assembled.checked,
       deleted: assembled.deleted,
-      divider: items.divider,
+      uncheckedDivider: items.uncheckedDivider,
+      checkedDivider: items.checkedDivider,
+      deletedDivider: items.deletedDivider,
     });
     setItemChanged(false);
   }, [itemChanged]);
@@ -120,17 +140,25 @@ export default function BasketList() {
         <View style={styles.listContainer}>
           <FlatList
             data={[
+              { name: "divider", id: "divider_unchecked" } as IBaskitIngredient,
               ...items.unchecked,
-              { name: "divider", id: "divider0" } as IBaskitIngredient,
+              { name: "divider", id: "divider_checked" } as IBaskitIngredient,
               ...items.checked,
-              { name: "divider", id: "divider1" } as IBaskitIngredient,
+              { name: "divider", id: "divider_deleted" } as IBaskitIngredient,
               ...items.deleted,
             ]}
             renderItem={({ item }) => (
               <>
-                {items.checked.length > 0 || items.deleted.length > 0 &&
-                  item.name === "divider" &&
-                  items.divider}
+                {items.unchecked.length > 0 &&
+                  item.id === "divider_unchecked" &&
+                  items.uncheckedDivider}
+                {items.checked.length > 0 &&
+                  item.id === "divider_checked" &&
+                  items.checkedDivider}
+                {items.deleted.length > 0 &&
+                  item.id === "divider_deleted" &&
+                  items.deletedDivider}
+                
                 {item.name !== "divider" && (
                   <BasketIngredient
                     disabled={item.markedAsDeleted}
@@ -173,10 +201,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
-    // backgroundColor: "red",
+    backgroundColor: "white",
   },
   listHeader: {
-    // backgroundColor: "green",
   },
   title: {
     color: "black",
@@ -185,7 +212,6 @@ const styles = StyleSheet.create({
   listContainer: {
     width: "100%",
     height: "100%",
-    // backgroundColor: 'magenta',
   },
   emptyContainer: {
     width: "100%",

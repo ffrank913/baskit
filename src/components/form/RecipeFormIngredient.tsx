@@ -70,7 +70,7 @@ export default function RecipeFormIngredient(props: {
         <TouchableHighlight disabled={nameValue.length === 0} style={styles.button} onPress={() => {
           props.confirmData({count: countValue, unit: unitValue, name: nameValue});
         }}>
-          <Text style={{...styles.buttonText, color: nameValue.length === 0 ? "rgba(100, 100, 100, 0.7)" : "white" }}>Zutat hinzufügen</Text>
+          <Text style={{...styles.buttonText, color: nameValue.length === 0 ? "rgba(100, 100, 100, 0.7)" : "white" }}>Hinzufügen</Text>
         </TouchableHighlight>
     </>
   );
@@ -84,7 +84,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    flex: 1,
+    flex: 0.33,
+    paddingLeft: 4,
+    paddingRight: 4,
 
     alignItems: "center",
     justifyContent: "center",

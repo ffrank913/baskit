@@ -31,11 +31,12 @@ export default function BasketListItemModal(props: {
     )
     .flat()
     .map((ingr: IBaskitIngredient) => {
+      console.log(ingr);
       return {
         ingredient: ingr,
         from: basketRecipes.find(
           (recipe: IBaskitRecipe) => recipe.id === ingr.recipeId
-        ).title,
+        )?.title || "Eigen",
       };
     });
 

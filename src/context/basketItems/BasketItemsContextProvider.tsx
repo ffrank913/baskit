@@ -75,13 +75,16 @@ export function BasketItemContextProvider({
   const addCustomIngredient = useCallback((ingredient: IIngredient) => {
     if (basketIngredients["__CUSTOM__"] === undefined)
       basketIngredients["__CUSTOM__"] = [];
-    basketIngredients["__CUSTOM__"].push(
+
+    const modified = {...basketIngredients};
+    modified["__CUSTOM__"].push(
       transformIngredient(
         ingredient,
         "__CUSTOM__",
         basketIngredients["__CUSTOM__"].length
       )
     );
+    setBasketIngredients(modified);
   }, [basketIngredients]);
 
   const modifyCustomIngredient = useCallback((overwriteIngredient: IBaskitIngredient) => {
