@@ -1,28 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
-import { IBasketIngredient, IIngredient } from "../../types";
+import { IBaskitIngredient, IIngredient } from "../../types";
 import BasketIngredient from "./basketIngredients/BasketIngedient";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 import BasketListItemModal from "./BasketListItemModal";
 
 type ListItemsObject = {
-  unchecked: IBasketIngredient[];
+  unchecked: IBaskitIngredient[];
   divider: React.JSX.Element;
-  checked: IBasketIngredient[];
-  deleted: IBasketIngredient[];
+  checked: IBaskitIngredient[];
+  deleted: IBaskitIngredient[];
 };
 
 export default function BasketList() {
   const { basketIngredients } = useBasketItemContext()
 
-  const [modalItem, setModalItem] = useState<IBasketIngredient | null>(null);
+  const [modalItem, setModalItem] = useState<IBaskitIngredient | null>(null);
   const [itemChanged, setItemChanged] = useState<boolean>(false);
 
-  const reduceItems = (items: IBasketIngredient[]): IBasketIngredient[] => {
-    let reduced: IBasketIngredient[] = [];
+  const reduceItems = (items: IBaskitIngredient[]): IBaskitIngredient[] => {
+    let reduced: IBaskitIngredient[] = [];
 
-    items.forEach((item: IBasketIngredient) => {
+    items.forEach((item: IBaskitIngredient) => {
       const existing = reduced.findIndex(
         (existingIngredient: IIngredient) =>
           existingIngredient.name === item.name
@@ -42,19 +42,19 @@ export default function BasketList() {
   };
 
   const assembleItems = (basketIngredients: {
-    [key: string]: IBasketIngredient[];
+    [key: string]: IBaskitIngredient[];
   }): ListItemsObject => {
     const checkedItems = Object.keys(basketIngredients)
       .map((key: string) =>
         basketIngredients[key].filter(
-          (ingr: IBasketIngredient) => ingr.checked && !ingr.markedAsDeleted
+          (ingr: IBaskitIngredient) => ingr.checked && !ingr.markedAsDeleted
         )
       )
       .flat();
     const uncheckedItems = Object.keys(basketIngredients)
       .map((key: string) =>
         basketIngredients[key].filter(
-          (ingr: IBasketIngredient) => !ingr.checked && !ingr.markedAsDeleted
+          (ingr: IBaskitIngredient) => !ingr.checked && !ingr.markedAsDeleted
         )
       )
       .flat();
@@ -62,7 +62,7 @@ export default function BasketList() {
     const deletedItems = Object.keys(basketIngredients)
       .map((key: string) =>
         basketIngredients[key].filter(
-          (ingr: IBasketIngredient) => ingr.markedAsDeleted
+          (ingr: IBaskitIngredient) => ingr.markedAsDeleted
         )
       )
       .flat();
@@ -97,13 +97,13 @@ export default function BasketList() {
     setItemChanged(false);
   }, [itemChanged]);
 
-  const setItemChecked = (item: IBasketIngredient, checked: boolean) => {
+  const setItemChecked = (item: IBaskitIngredient, checked: boolean) => {
     const list = Object.keys(basketIngredients)
       .map((key: string) => basketIngredients[key])
       .flat()
-      .filter((ingr: IBasketIngredient) => ingr.name === item.name);
+      .filter((ingr: IBaskitIngredient) => ingr.name === item.name);
     if (list.length === 0) return;
-    list.forEach((ingr: IBasketIngredient) => {
+    list.forEach((ingr: IBaskitIngredient) => {
       ingr.checked = checked;
     });
     setItemChanged(true);
@@ -121,9 +121,9 @@ export default function BasketList() {
           <FlatList
             data={[
               ...items.unchecked,
-              { name: "divider", id: "divider0" } as IBasketIngredient,
+              { name: "divider", id: "divider0" } as IBaskitIngredient,
               ...items.checked,
-              { name: "divider", id: "divider1" } as IBasketIngredient,
+              { name: "divider", id: "divider1" } as IBaskitIngredient,
               ...items.deleted,
             ]}
             renderItem={({ item }) => (

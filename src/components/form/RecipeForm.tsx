@@ -3,23 +3,38 @@ import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
 import { AssetLib } from "../../AssetLib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RecipeFormIngredientsList from "./RecipeFormIngredientsList";
 import RecipeFormInstructions from "./RecipeFormInstructions";
 import AddRecipe from "./AddRecipe";
-import { IIngredient } from "../../types";
+import { IIngredient, IRecipe } from "../../types";
 import RecipeFormTitle from "./RecipeFormTitle";
 import RecipeFormDescription from "./RecipeFormDescription";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
+import useDBInsert from "../../context/database/hooks/useDBInsert";
+import useDBQuery from "../../context/database/hooks/useDBQuery";
 
 export default function RecipeForm(props: { onClose: () => void }) {
   const { addRecipe } = useBasketItemContext();
-
+  const insertRecipe = useDBInsert('recipes');
+  const queryRecipes = useDBQuery('recipes');
+  
   const [titleValue, setTitleValue] = useState<string>("");
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
+  
+  const addRecipeToDatabase = async () => {
+    const recipe = {
+      title: titleValue,
+      image: imageUri || "Default",
+      ingredients: JSON.stringify(ingredients),
+      description: descriptionValue,
+      instructions: JSON.stringify(instructions),
+    }
+    await insertRecipe(Object.keys(recipe), Object.values(recipe));
+  }
 
   return (
     <View
@@ -91,13 +106,8 @@ export default function RecipeForm(props: { onClose: () => void }) {
           <AddRecipe
             onCancel={() => {}}
             onConfirm={() => {
-              addRecipe({
-                title: titleValue,
-                image: imageUri || "Default",
-                ingredients: ingredients,
-                description: descriptionValue,
-                instructions: instructions,
-              });
+              addRecipeToDatabase();
+              props.onClose();
             }}
           ></AddRecipe>
         </ScrollView>

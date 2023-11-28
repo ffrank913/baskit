@@ -1,9 +1,11 @@
-import { IRecipe } from "./IRecipe.types";
-import { IIngredient } from "./IIngredient.types";
-import { IBasketIngredient } from './IBasketIngredient.types'
+import { IRecipe } from "./general/IRecipe.types";
+import { IIngredient } from "./general/IIngredient.types";
+import { IBaskitIngredient } from './internal/IBaskitIngredient.types'
+import { IBaskitRecipe } from "./internal/IBaskitRecipe.types";
 
 export {
     IRecipe,
     IIngredient,
-    IBasketIngredient,
+    IBaskitIngredient,
+    IBaskitRecipe,
 }

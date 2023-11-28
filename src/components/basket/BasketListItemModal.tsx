@@ -8,39 +8,39 @@ import {
 import { Text } from "react-native-paper";
 import { AssetLib } from "../../AssetLib";
 import { useState } from "react";
-import { IBasketIngredient } from "../../types";
+import { IBaskitIngredient } from "../../types";
 import { AssembleIngredient } from "../../helper/AssembleIngredient";
-import { IBasketRecipe } from "../../types/IBasketRecipe.types";
+import { IBaskitRecipe } from "../../types/internal/IBaskitRecipe.types";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 
 export default function BasketListItemModal(props: {
-  item: IBasketIngredient;
+  item: IBaskitIngredient;
   onClose: () => void;
 }) {
   const { basketIngredients, basketRecipes, modifyCustomIngredient } =
     useBasketItemContext();
 
   const [objectToDelete, setObjectToDelete] =
-    useState<IBasketIngredient | null>(null);
+    useState<IBaskitIngredient | null>(null);
 
   const data = Object.keys(basketIngredients)
     .map((key: string) =>
       basketIngredients[key].filter(
-        (ingr: IBasketIngredient) => ingr.name === props.item.name
+        (ingr: IBaskitIngredient) => ingr.name === props.item.name
       )
     )
     .flat()
-    .map((ingr: IBasketIngredient) => {
+    .map((ingr: IBaskitIngredient) => {
       return {
         ingredient: ingr,
         from: basketRecipes.find(
-          (recipe: IBasketRecipe) => recipe.id === ingr.recipeId
+          (recipe: IBaskitRecipe) => recipe.id === ingr.recipeId
         ).title,
       };
     });
 
   const changeDeleteStatus = (
-    objectToDelete: IBasketIngredient,
+    objectToDelete: IBaskitIngredient,
     markAsDeleted: boolean
   ) => {
     objectToDelete.markedAsDeleted = markAsDeleted;

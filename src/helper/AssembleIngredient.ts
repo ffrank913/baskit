@@ -1,6 +1,6 @@
-import { IBasketIngredient, IIngredient } from "../types";
+import { IBaskitIngredient, IIngredient } from "../types";
 
-export const AssembleIngredient = (ingredient: IIngredient | IBasketIngredient): string => {
+export const AssembleIngredient = (ingredient: IIngredient | IBaskitIngredient): string => {
   let text: string = ingredient.name;
   if (ingredient.count) {
     if (!ingredient.unit) {

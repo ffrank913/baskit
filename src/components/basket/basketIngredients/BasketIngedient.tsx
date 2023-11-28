@@ -2,10 +2,10 @@ import { Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import Checkbox from "../../checkbox/Checkbox";
 import { AssembleIngredient } from "../../../helper/AssembleIngredient";
-import { IBasketIngredient } from "../../../types";
+import { IBaskitIngredient } from "../../../types";
 
 export default function BasketIngredient(props: {
-  ingredient: IBasketIngredient;
+  ingredient: IBaskitIngredient;
   disabled: boolean,
   onCheckChanged: (checked: boolean) => void;
   onLongPress: () => void;

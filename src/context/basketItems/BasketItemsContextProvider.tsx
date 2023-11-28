@@ -5,19 +5,19 @@ import {
   useMemo,
   useState,
 } from "react";
-import { IBasketIngredient, IIngredient, IRecipe } from "../../types";
-import { IBasketRecipe } from "../../types/IBasketRecipe.types";
+import { IBaskitIngredient, IIngredient, IRecipe } from "../../types";
+import { IBaskitRecipe } from "../../types/internal/IBaskitRecipe.types";
 import "react-native-get-random-values";
 import { v4 } from "uuid";
 
 type BasketItemContextType = {
   basketRecipes: IRecipe[];
-  basketIngredients: { [key: string]: IBasketIngredient[] };
+  basketIngredients: { [key: string]: IBaskitIngredient[] };
   addRecipe: (recipe: IRecipe) => void;
-  removeRecipe: (recipe: IBasketRecipe) => void;
+  removeRecipe: (recipe: IBaskitRecipe) => void;
   addCustomIngredient: (ingredient: IIngredient) => void;
-  modifyCustomIngredient: (overwriteIngredient: IBasketIngredient) => void;
-  removeCustomIngredient: (recipe: IBasketIngredient) => void;
+  modifyCustomIngredient: (overwriteIngredient: IBaskitIngredient) => void;
+  removeCustomIngredient: (recipe: IBaskitIngredient) => void;
 };
 
 const BasketItemContext = createContext<BasketItemContextType>(null);
@@ -29,8 +29,8 @@ export function BasketItemContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [basketRecipes, setBasketRecipe] = useState<IBasketRecipe[]>([]);
-  const [basketIngredients, setBasketIngredients] = useState<{ [key: string]: IBasketIngredient[] }>({});
+  const [basketRecipes, setBasketRecipe] = useState<IBaskitRecipe[]>([]);
+  const [basketIngredients, setBasketIngredients] = useState<{ [key: string]: IBaskitIngredient[] }>({});
 
   const transformRecipe = (recipe: IRecipe, recipeIndex: number) => {
     const recipeID = v4();
@@ -84,21 +84,21 @@ export function BasketItemContextProvider({
     );
   }, [basketIngredients]);
 
-  const modifyCustomIngredient = useCallback((overwriteIngredient: IBasketIngredient) => {
+  const modifyCustomIngredient = useCallback((overwriteIngredient: IBaskitIngredient) => {
     const copy = {...basketIngredients};
     let ingr = copy[overwriteIngredient.recipeId].find((ingr) => ingr.id === overwriteIngredient.id);
     ingr = { ...ingr, ...overwriteIngredient };
     setBasketIngredients(copy)
   }, [basketIngredients]);
 
-  const removeRecipe = useCallback((recipe: IBasketRecipe) => {
+  const removeRecipe = useCallback((recipe: IBaskitRecipe) => {
     if (recipe.id === "__CUSTOM__") {
       console.warn("Cannot delete custom recipe. Aborting...");
       return;
     }
 
     const recipeIndex = basketRecipes.findIndex(
-      (exists: IBasketRecipe) => exists.id === recipe.id
+      (exists: IBaskitRecipe) => exists.id === recipe.id
     );
     if (recipeIndex === -1) {
       console.warn(
@@ -113,17 +113,17 @@ export function BasketItemContextProvider({
     delete basketIngredients[removed.id];
   }, [basketRecipes, basketIngredients]);
 
-  const removeCustomIngredient = useCallback((ingredient: IBasketIngredient) => {
+  const removeCustomIngredient = useCallback((ingredient: IBaskitIngredient) => {
     const removed = basketIngredients[ingredient.recipeId].splice(
       basketIngredients[ingredient.recipeId].findIndex(
-        (ingr: IBasketIngredient) => ingr.id === ingredient.id
+        (ingr: IBaskitIngredient) => ingr.id === ingredient.id
       ),
       1
     )[0];
     if (removed.recipeId === "__CUSTOM__") return;
 
     const recipeIndex = basketRecipes.findIndex(
-      (recipe: IBasketRecipe) => recipe.id === removed.recipeId
+      (recipe: IBaskitRecipe) => recipe.id === removed.recipeId
     );
     if (recipeIndex === -1) {
       console.warn(
@@ -135,7 +135,7 @@ export function BasketItemContextProvider({
     }
 
     basketRecipes[recipeIndex].ingredients.find(
-      (ingr: IBasketIngredient) => ingr.name === ingredient.name
+      (ingr: IBaskitIngredient) => ingr.name === ingredient.name
     ).markedAsDeleted = true;
   }, [basketRecipes, basketIngredients]);
 

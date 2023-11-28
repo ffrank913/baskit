@@ -1,6 +1,6 @@
-import { IIngredient } from "./IIngredient.types";
+import { IIngredient } from "../general/IIngredient.types";
 
-export type IBasketIngredient = IIngredient & {
+export type IBaskitIngredient = IIngredient & {
     id: string,
     recipeId: string | '__CUSTOM__',
     checked: boolean,
