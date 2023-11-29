@@ -35,6 +35,7 @@ export default function App() {
     if (ready) {
       SplashScreen.hideAsync();
       // db.executeQuery('drop table recipes')
+      // db.executeQuery('drop table ingredients')
     }
   }, [ready]);
 
