@@ -4,7 +4,7 @@
     "slug": "baskit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/app/icon2.png",
+    "icon": "./assets/app/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/app/splash.png",
@@ -20,13 +20,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/app/adaptive-icon.png",
+        "foregroundImage": "./assets/app/adaptiveicon.png",
         "backgroundColor": "#eb6b96"
       },
       "package": "com.ffrank.baskit"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "929efdc8-6053-4392-9642-2c4677ba42ed"
+      }
     }
   }
 }

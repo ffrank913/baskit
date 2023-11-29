@@ -11,16 +11,20 @@ import {
   SCHEMA_RECIPES,
 } from "./src";
 import { BasketItemContextProvider } from "./src/context/basketItems/BasketItemsContextProvider";
+import { IsAndroid } from "./src/helper/IsAndroid";
+import { Asset } from "expo-asset";
 
 const db = new Database("baskitDB", "1.0");
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
-    // "SF-Compact-Rounded-Medium": require("./assets/fonts/SF-Compact-Rounded-Medium.otf"),
-    "SF-Compact-Rounded-Semibold": require("./assets/fonts/SF-Compact-Rounded-Semibold.otf"),
+  const [ready, setReady] = useState(false);
+  const [dbInitialized, setDBInizialized] = useState(false);
+
+  const [fontsLoaded] = useFonts({
+    "SFCompactRoundedSemibold": IsAndroid ? Asset.fromModule(require("./assets/fonts/SF-Compact-Rounded-Semibold.otf"))
+    : require("./assets/fonts/SF-Compact-Rounded-Semibold.otf"),
   });
 
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -34,20 +38,21 @@ export default function App() {
 
       db.OnReady();
 
-      setReady(true);
+      setDBInizialized(true);
     };
     init();
   }, []);
 
   useEffect(() => {
-    if (ready && fontsLoaded) {
+    if (dbInitialized && fontsLoaded) {
       SplashScreen.hideAsync();
+      setReady(true);
       // db.executeQuery('drop table recipes')
       // db.executeQuery('drop table items')
     }
-  }, [ready, fontsLoaded]);
+  }, [dbInitialized, fontsLoaded]);
 
-  if (!ready || !fontsLoaded) {
+  if (!ready) {
     return <></>;
   }
 

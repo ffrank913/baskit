@@ -53,8 +53,6 @@ export default function RecipeForm(props: {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
     }
@@ -115,7 +113,6 @@ export default function RecipeForm(props: {
               style={styles.camButton}
               underlayColor={"rgba(0, 0, 0, 0.4)"}
               onPress={() => {
-                console.log("Say Cheese!");
                 pickImage();
               }}
             >

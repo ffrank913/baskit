@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   title: {
     color: "white",
     fontSize: 40,
-    fontFamily: "SF-Compact-Rounded-Semibold",
+    fontFamily: "SFCompactRoundedSemibold",
   },
   addButtonStyle: {
     backgroundColor: "#8a495f",
