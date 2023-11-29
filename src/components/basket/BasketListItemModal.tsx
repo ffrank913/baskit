@@ -12,6 +12,7 @@ import { IBaskitIngredient } from "../../types";
 import { AssembleIngredient } from "../../helper/AssembleIngredient";
 import { IBaskitRecipe } from "../../types/internal/IBaskitRecipe.types";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
+import { BlurView } from "expo-blur";
 
 export default function BasketListItemModal(props: {
   item: IBaskitIngredient;
@@ -50,12 +51,13 @@ export default function BasketListItemModal(props: {
 
   return (
     <>
-      <View
+      <BlurView
         style={{
           position: "absolute",
           width: "100%",
           height: "100%",
         }}
+        intensity={10}
       >
         <View style={styles.container}>
           <View
@@ -146,7 +148,7 @@ export default function BasketListItemModal(props: {
             keyExtractor={(item) => item.ingredient.id}
           />
         </View>
-      </View>
+      </BlurView>
       {objectToDelete && (
         <View style={styles.container}>
           <View

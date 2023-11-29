@@ -12,6 +12,7 @@ import RecipeFormTitle from "./RecipeFormTitle";
 import RecipeFormDescription from "./RecipeFormDescription";
 import useDBInsert from "../../context/database/hooks/useDBInsert";
 import { ToDBRecipe } from "../../helper/ToDBRecipe";
+import { BlurView } from "expo-blur";
 
 export default function RecipeForm(props: { onClose: (changed: boolean) => void }) {
   const insertRecipe = useDBInsert('recipes');
@@ -37,7 +38,7 @@ export default function RecipeForm(props: { onClose: (changed: boolean) => void 
     <View
       style={{ flex: 1, position: "absolute", width: "100%", height: "100%" }}
     >
-      <View style={styles.container}>
+      <BlurView style={styles.container} intensity={10}>
         <ScrollView style={styles.content}>
           <View
             style={{
@@ -94,7 +95,7 @@ export default function RecipeForm(props: { onClose: (changed: boolean) => void 
             }}
           ></AddRecipe>
         </ScrollView>
-      </View>
+      </BlurView>
     </View>
   );
 }

@@ -7,6 +7,7 @@ import BasketListItemModal from "./BasketListItemModal";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 import useDBQuery from "../../context/database/hooks/useDBQuery";
 import { FromDBIngredient } from "../../helper/FromDBIngredient";
+import {BlurView} from 'expo-blur';
 
 type ListItemsObject = {
   unchecked: IBaskitIngredient[];
@@ -222,7 +223,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
-    backgroundColor: "white",
   },
   listHeader: {
   },
@@ -231,8 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   listContainer: {
-    width: "100%",
-    height: "100%",
+    
   },
   emptyContainer: {
     width: "100%",

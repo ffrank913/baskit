@@ -14,12 +14,13 @@ import AddToBasket from "../addtobasket/AddToBasket";
 import { IBaskitRecipe } from "../../../types";
 import { useBasketItemContext } from "../../../context/basketItems/BasketItemsContextProvider";
 import useDBRemove from "../../../context/database/hooks/useDBRemove";
+import { BlurView } from "expo-blur";
 
 export default function RecipeModal(props: {
   data: IBaskitRecipe;
   onClose: (changed: boolean) => void;
 }) {
-  const { addRecipe } = useBasketItemContext();
+  const { addRecipeToBasket } = useBasketItemContext();
   
   const removeRecipe = useDBRemove('recipes');
   const removeRecipeFromDB = async () => {
@@ -28,7 +29,7 @@ export default function RecipeModal(props: {
   
   return (
     <View style={{flex: 1, position: "absolute", width: "100%", height: "100%"}}>
-      <View style={styles.container}>
+      <BlurView style={styles.container} intensity={10}>
         <ScrollView style={styles.content}>
           <View style={{
               height: 44,
@@ -90,11 +91,11 @@ export default function RecipeModal(props: {
           <Text style={styles.ingredientsTitle}>{"Zutaten"}</Text>
           <RecipeIngredientsList ingredients={props.data.ingredients}/>
           <AddToBasket onAdd={() => {
-            addRecipe(props.data);
+            addRecipeToBasket(props.data);
           }}/>
           <Instructions instructions={props.data.instructions}/>
         </ScrollView>
-      </View>
+      </BlurView>
     </View>
   );
 }
@@ -103,10 +104,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "absolute",
-    width: "98%",
-    height: "98%",
-    top: "1%",
-    left: "1%",
+    width: "96%",
+    height: "96%",
+    top: "2%",
+    left: "2%",
     padding: 16,
     backgroundColor: "rgba(0, 0, 0, 0.9)",
     borderRadius: 8,
