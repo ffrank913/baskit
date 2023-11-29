@@ -3,7 +3,7 @@ import { SQLResultSet } from "expo-sqlite";
 import { ISQLiteUpdate, ISQLiteWhere } from "../../../types/db";
 import { DBContext } from "../DBContextProvider";
 
-export default function useUpdate(name: string) {
+export default function useDBUpdate(name: string) {
   const database = useContext(DBContext);
 
   const update = useCallback(async (
