@@ -86,7 +86,7 @@ export default function RecipeModal(props: {
           </TouchableOpacity>
           </View>
           <Text style={styles.title}>{props.data.title}</Text>
-          <Image style={styles.image} source={ImageLib[props.data.image]} />
+          <Image style={styles.image} source={props.data.image ? { uri: props.data.image } : ImageLib["Default"]} />
           <Text style={styles.description}>{"Beschreibung: " + props.data.description}</Text>
           <Text style={styles.ingredientsTitle}>{"Zutaten"}</Text>
           <RecipeIngredientsList ingredients={props.data.ingredients}/>

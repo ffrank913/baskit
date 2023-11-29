@@ -11,7 +11,7 @@ export default function RecipeButton(props: {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={() => props.onPress()}>
-        <Image style={styles.image} source={ImageLib[props.image]} />
+        <Image style={styles.image} source={props.image ? { uri: props.image } : ImageLib["Default"]} />
         <View style={styles.textBackground}>
           <Text style={styles.text}>{props.title}</Text>
         </View>
