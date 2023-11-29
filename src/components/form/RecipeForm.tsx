@@ -1,4 +1,11 @@
-import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  TouchableHighlight,
+  Alert,
+} from "react-native";
 import { Text } from "react-native-paper";
 import { ScrollView } from "react-native-virtualized-view";
 import { ImageLib } from "../../ImageLib";
@@ -13,16 +20,19 @@ import RecipeFormDescription from "./RecipeFormDescription";
 import useDBInsert from "../../context/database/hooks/useDBInsert";
 import { ToDBRecipe } from "../../helper/ToDBRecipe";
 import { BlurView } from "expo-blur";
+import * as ImagePicker from "expo-image-picker";
 
-export default function RecipeForm(props: { onClose: (changed: boolean) => void }) {
-  const insertRecipe = useDBInsert('recipes');
-  
+export default function RecipeForm(props: {
+  onClose: (changed: boolean) => void;
+}) {
+  const insertRecipe = useDBInsert("recipes");
+
   const [titleValue, setTitleValue] = useState<string>("");
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState<string>("");
   const [instructions, setInstructions] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<IIngredient[]>([]);
-  
+
   const addRecipeToDB = async () => {
     const dbRecipe = ToDBRecipe({
       title: titleValue,
@@ -32,7 +42,23 @@ export default function RecipeForm(props: { onClose: (changed: boolean) => void 
       instructions: instructions,
     });
     await insertRecipe(Object.keys(dbRecipe), Object.values(dbRecipe));
-  }
+  };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
   return (
     <View
@@ -58,7 +84,12 @@ export default function RecipeForm(props: { onClose: (changed: boolean) => void 
               }}
             >
               <Image
-                style={{ left: "12%", top: "12%", width: "75%", height: "75%" }}
+                style={{
+                  left: "12%",
+                  top: "12%",
+                  width: "75%",
+                  height: "75%",
+                }}
                 source={AssetLib.Cross}
               ></Image>
             </TouchableOpacity>
@@ -67,7 +98,31 @@ export default function RecipeForm(props: { onClose: (changed: boolean) => void 
             title={titleValue}
             setTitle={setTitleValue}
           ></RecipeFormTitle>
-          <Image style={styles.image} source={ImageLib["Default"]} />
+          <View style={styles.imageContainer}>
+            <Image style={styles.image} source={imageUri ? { uri: imageUri } : ImageLib["Default"]} />
+            {imageUri ? (
+              <TouchableHighlight
+              style={styles.imageDeleteButton}
+              underlayColor={"rgba(0, 0, 0, 0.4)"}
+              onPress={() => {
+                setImageUri(null);
+              }}
+            >
+              <Image style={styles.imageDeleteIcon} source={AssetLib.Cross} />
+            </TouchableHighlight>
+            ) : (
+              <TouchableHighlight
+              style={styles.camButton}
+              underlayColor={"rgba(0, 0, 0, 0.4)"}
+              onPress={() => {
+                console.log("Say Cheese!");
+                pickImage();
+              }}
+            >
+              <Image style={styles.camIcon} source={AssetLib.Camera} />
+            </TouchableHighlight>
+          )}
+          </View>
           <View style={{ flex: 1, flexDirection: "row" }}>
             <Text style={styles.description}>{"Beschreibung: "}</Text>
             <RecipeFormDescription
@@ -139,11 +194,43 @@ const styles = StyleSheet.create({
     color: "rgb(255,255,255)",
     fontSize: 18,
   },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   image: {
     width: "100%",
     height: "auto",
     aspectRatio: 1,
     borderRadius: 8,
+  },
+  camButton: {
+    position: "absolute",
+    margin: 32,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  camIcon: {
+    width: "80%",
+    height: "auto",
+    aspectRatio: 1,
+  },
+  imageDeleteButton: {
+    position: "absolute",
+    padding: 12,
+    top: 8,
+    right: 8,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 42,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imageDeleteIcon: {
+    width: 24,
+    height: "auto",
+    aspectRatio: 1,
   },
   button: {
     flex: 1,

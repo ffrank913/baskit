@@ -22,4 +22,7 @@ export const AssetLib = {
   Trash: isAndroid
     ? Asset.fromModule(require("../assets/icons/trash.png"))
     : require("../assets/icons/trash.png"),
+  Camera: isAndroid
+    ? Asset.fromModule(require("../assets/icons/camera.png"))
+    : require("../assets/icons/camera.png"),
 };
