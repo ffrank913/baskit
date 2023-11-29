@@ -12,6 +12,9 @@ export const SCHEMA_RECIPES = `
 export const SCHEMA_INGREDIENTS = `
   create table if not exists ingredients(
       id text primary key,
+      name text not null,
+      unit string,
+      count number,
       recipeId text not null,
       checked boolean,
       markedAsDeleted boolean
