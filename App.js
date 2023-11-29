@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
+import { useFonts } from 'expo-font';
 import {
   Router,
   Database,
@@ -14,6 +15,11 @@ import { BasketItemContextProvider } from "./src/context/basketItems/BasketItems
 const db = new Database("baskitDB", "1.0");
 
 export default function App() {
+  let [fontsLoaded] = useFonts({
+    // "SF-Compact-Rounded-Medium": require("./assets/fonts/SF-Compact-Rounded-Medium.otf"),
+    "SF-Compact-Rounded-Semibold": require("./assets/fonts/SF-Compact-Rounded-Semibold.otf"),
+  });
+
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -34,14 +40,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (ready) {
+    if (ready && fontsLoaded) {
       SplashScreen.hideAsync();
       // db.executeQuery('drop table recipes')
       // db.executeQuery('drop table items')
     }
-  }, [ready]);
+  }, [ready, fontsLoaded]);
 
-  if (!ready) {
+  if (!ready || !fontsLoaded) {
     return <></>;
   }
 
@@ -61,9 +67,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  text: {
-    fontSize: 25,
-    fontWeight: "500",
   },
 });

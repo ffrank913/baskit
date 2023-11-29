@@ -12,7 +12,7 @@ import { BlurView } from "expo-blur";
 export default function Basket() {
   const { addItem, clearAllItems } = useBasketItemContext();
 
-  const [showClearModal, setShowClearModal] = useState<boolean>(true);
+  const [showClearModal, setShowClearModal] = useState<boolean>(false);
 
   return (
     <View style={styles.container}>
@@ -149,7 +149,8 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "white",
-    fontSize: 36,
+    fontSize: 40,
+    fontFamily: "SF-Compact-Rounded-Semibold",
   },
   addButtonStyle: {
     backgroundColor: "#8a495f",

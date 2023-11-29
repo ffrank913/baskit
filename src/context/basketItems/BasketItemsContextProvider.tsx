@@ -15,6 +15,7 @@ import { ToDBIngredient } from "../../helper/ToDBIngredient";
 import useDBQuery from "../database/hooks/useDBQuery";
 import { FromDBIngredient } from "../../helper/FromDBIngredient";
 import useDBUpdate from "../database/hooks/useDBUpdate";
+import useDBClear from "../database/hooks/useDBClear";
 
 type BasketItemContextType = {
   basketRecipes: IRecipe[];
@@ -40,6 +41,7 @@ export function BasketItemContextProvider({
   const insertBasketItem = useDBInsert('items');
   const queryBasketItems = useDBQuery('items');
   const updateBasketItems = useDBUpdate('items');
+  const clearBasketItems = useDBClear('items');
   
   const [basketRecipes, setBasketRecipes] = useState<IBaskitRecipe[]>([]);
   const [basketItems, setBasketItems] = useState<{ [key: string]: IBaskitIngredient[] }>({});
@@ -175,7 +177,9 @@ export function BasketItemContextProvider({
   }, [basketRecipes, basketItems]);
 
   const clearAllItems = useCallback(() => {
-
+    setBasketItems({});
+    setBasketRecipes([]);
+    clearBasketItems().then((result) => console.log(result));
   }, [basketItems])
 
   const contextObject = useMemo(() => {
