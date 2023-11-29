@@ -6,7 +6,7 @@ import { IIngredient } from "../../types";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
 
 export default function Basket() {
-  const { addCustomIngredient } = useBasketItemContext();
+  const { addItem: addCustomIngredient } = useBasketItemContext();
 
   return (
     <View style={styles.container}>
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     padding: 16,
     backgroundColor: "#eb6b96",
+    flexDirection: "row",
   },
   title: {
     color: "white",

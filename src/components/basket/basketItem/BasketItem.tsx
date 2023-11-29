@@ -2,19 +2,18 @@ import { Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import Checkbox from "../../checkbox/Checkbox";
 import { AssembleIngredient } from "../../../helper/AssembleIngredient";
-import { IBaskitIngredient } from "../../../types";
+import { IBaskitIngredient as IBaskitItem } from "../../../types";
 
-export default function BasketIngredient(props: {
-  ingredient: IBaskitIngredient;
-  disabled: boolean,
+export default function BasketItem(props: {
+  ingredient: IBaskitItem;
   onCheckChanged: (checked: boolean) => void;
   onLongPress: () => void;
 }) {
   return (
     <View style={styles.container}>
       <Checkbox
-        defaultValue={false}
-        disabled={props.disabled}
+        defaultValue={props.ingredient.checked}
+        disabled={props.ingredient.markedAsDeleted}
         tintColor={props.ingredient.checked ? "rgb(150, 150, 150)" : "black"}
         onValueChanged={(checked: boolean) => {
           props.onCheckChanged(checked);

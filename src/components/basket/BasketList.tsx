@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { FlatList, View, StyleSheet } from "react-native";
 import { Divider, Text } from "react-native-paper";
 import { IBaskitIngredient, IIngredient } from "../../types";
-import BasketIngredient from "./basketIngredients/BasketIngedient";
+import BasketItem from "./basketItem/BasketItem";
 import BasketListItemModal from "./BasketListItemModal";
 import { useBasketItemContext } from "../../context/basketItems/BasketItemsContextProvider";
+import useDBQuery from "../../context/database/hooks/useDBQuery";
+import { FromDBIngredient } from "../../helper/FromDBIngredient";
 
 type ListItemsObject = {
   unchecked: IBaskitIngredient[];
@@ -16,7 +18,7 @@ type ListItemsObject = {
 };
 
 export default function BasketList() {
-  const { basketIngredients } = useBasketItemContext();
+  const { basketItems } = useBasketItemContext();
 
   const [modalItem, setModalItem] = useState<IBaskitIngredient | null>(null);
   const [itemChanged, setItemChanged] = useState<boolean>(false);
@@ -43,27 +45,27 @@ export default function BasketList() {
     return reduced;
   };
 
-  const assembleItems = (basketIngredients: {
+  const assembleItems = (basketItems: {
     [key: string]: IBaskitIngredient[];
   }): ListItemsObject => {
-    const checkedItems = Object.keys(basketIngredients)
+    const checkedItems = Object.keys(basketItems)
       .map((key: string) =>
-        basketIngredients[key].filter(
+        basketItems[key].flat().filter(
           (ingr: IBaskitIngredient) => ingr.checked && !ingr.markedAsDeleted
         )
       )
       .flat();
-    const uncheckedItems = Object.keys(basketIngredients)
+    const uncheckedItems = Object.keys(basketItems)
       .map((key: string) =>
-        basketIngredients[key].filter(
+        basketItems[key].filter(
           (ingr: IBaskitIngredient) => !ingr.checked && !ingr.markedAsDeleted
         )
       )
       .flat();
 
-    const deletedItems = Object.keys(basketIngredients)
+    const deletedItems = Object.keys(basketItems)
       .map((key: string) =>
-        basketIngredients[key].filter(
+        basketItems[key].filter(
           (ingr: IBaskitIngredient) => ingr.markedAsDeleted
         )
       )
@@ -93,18 +95,38 @@ export default function BasketList() {
     };
   };
 
-  const [items, setItems] = useState<ListItemsObject>(
-    assembleItems(basketIngredients)
-  );
+  const [items, setItems] = useState<ListItemsObject>({
+    unchecked: [],
+    checked: [],
+    deleted: [],
+    uncheckedDivider: (
+      <View>
+        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+        <Text style={{ color: "grey" }}>Offen</Text>
+      </View>
+    ),
+    checkedDivider: (
+      <View>
+        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+        <Text style={{ color: "grey" }}>Erledigt</Text>
+      </View>
+    ),
+    deletedDivider: (
+      <View>
+        <Divider style={{ marginTop: 8, marginBottom: 8 }}></Divider>
+        <Text style={{ color: "grey" }}>Gelöscht</Text>
+      </View>
+    ),
+  });
 
   useEffect(() => {
-    console.log(basketIngredients);
-    setItems(assembleItems(basketIngredients));
-  }, [basketIngredients]);
+    if(!basketItems) return;
+    setItems(assembleItems(basketItems));
+  }, [basketItems]);
 
   useEffect(() => {
     if (!itemChanged) return;
-    const assembled = assembleItems(basketIngredients);
+    const assembled = assembleItems(basketItems);
 
     setItems({
       unchecked: assembled.unchecked,
@@ -118,10 +140,10 @@ export default function BasketList() {
   }, [itemChanged]);
 
   const setItemChecked = (item: IBaskitIngredient, checked: boolean) => {
-    const list = Object.keys(basketIngredients)
-      .map((key: string) => basketIngredients[key])
-      .flat()
-      .filter((ingr: IBaskitIngredient) => ingr.name === item.name);
+    const list = Object.keys(basketItems)
+    .map((key: string) => basketItems[key])
+    .flat()
+    .filter((ingr: IBaskitIngredient) => ingr.name === item.name);
     if (list.length === 0) return;
     list.forEach((ingr: IBaskitIngredient) => {
       ingr.checked = checked;
@@ -160,8 +182,7 @@ export default function BasketList() {
                   items.deletedDivider}
                 
                 {item.name !== "divider" && (
-                  <BasketIngredient
-                    disabled={item.markedAsDeleted}
+                  <BasketItem
                     onCheckChanged={(checked: boolean) => {
                       setItemChecked(item, checked);
                     }}

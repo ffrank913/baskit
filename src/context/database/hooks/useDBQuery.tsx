@@ -14,7 +14,9 @@ export default function useDBQuery(dbName: string) {
     where?: ISQLiteWhere
   ): Promise<SQLResultSet> => {
     return new Promise((resolve, reject) => {
-      if (!database) return;
+      if (!database) {
+        reject("Database not available in useDBQuery. Aborting...");
+      };
       const sql = where ? `SELECT * FROM ${dbName} WHERE ${where.field}${where.conditional}?` : `SELECT * FROM ${dbName}`
       database
         .executeQuery(sql, where ? [where.value] : [])

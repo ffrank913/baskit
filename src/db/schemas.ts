@@ -9,8 +9,8 @@ export const SCHEMA_RECIPES = `
   );
 `;
 
-export const SCHEMA_INGREDIENTS = `
-  create table if not exists ingredients(
+export const SCHEMA_ITEMS = `
+  create table if not exists items(
       id text primary key,
       name text not null,
       unit string,

@@ -17,21 +17,20 @@ export default function BasketListItemModal(props: {
   item: IBaskitIngredient;
   onClose: () => void;
 }) {
-  const { basketIngredients, basketRecipes, modifyCustomIngredient } =
+  const { basketItems, basketRecipes, modifyItem: modifyCustomIngredient } =
     useBasketItemContext();
 
   const [objectToDelete, setObjectToDelete] =
     useState<IBaskitIngredient | null>(null);
 
-  const data = Object.keys(basketIngredients)
+  const data = Object.keys(basketItems)
     .map((key: string) =>
-      basketIngredients[key].filter(
+      basketItems[key].filter(
         (ingr: IBaskitIngredient) => ingr.name === props.item.name
       )
     )
     .flat()
     .map((ingr: IBaskitIngredient) => {
-      console.log(ingr);
       return {
         ingredient: ingr,
         from: basketRecipes.find(

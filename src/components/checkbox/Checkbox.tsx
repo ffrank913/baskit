@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TouchableOpacity, Image, StyleSheet, View, ColorValue } from "react-native";
+import { TouchableHighlight, Image, StyleSheet, View, ColorValue } from "react-native";
 import { AssetLib } from "../../AssetLib";
 
 export default function Checkbox(props: {
@@ -15,8 +15,8 @@ export default function Checkbox(props: {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        disabled={props.disabled}
+      <TouchableHighlight
+        underlayColor={"transparent"}
         style={ styles.checkbox }
         onPress={() => {
           if(props.disabled) return;
@@ -27,23 +27,25 @@ export default function Checkbox(props: {
           if(props.onLongPress) props.onLongPress();
         }}
       >
-        <Image
-          style={{ width: 28, height: 28, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor }}
-          source={AssetLib.Unchecked}
-        ></Image>
-        {checked && (
+        <>
           <Image
-            style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor}}
-            source={AssetLib.Check}
+            style={{ width: 28, height: 28, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor }}
+            source={AssetLib.Unchecked}
           ></Image>
-        )}
-        {props.hidden && (
-          <View
-            style={{ width: 28, height: 28 }}
-          ></View>
-        )}
-        {props.children}
-      </TouchableOpacity>
+          {checked && (
+            <Image
+              style={{ position: "absolute", width: 20, height: 20, top: 3, left: 7, display: props.hidden ? "none" : "flex", tintColor: props.disabled ? 'rgba(100, 100, 100, 0.8)' : props.tintColor}}
+              source={AssetLib.Check}
+            ></Image>
+          )}
+          {props.hidden && (
+            <View
+              style={{ width: 28, height: 28 }}
+            ></View>
+          )}
+          {props.children}
+        </>
+      </TouchableHighlight>
     </View>
   );
 }

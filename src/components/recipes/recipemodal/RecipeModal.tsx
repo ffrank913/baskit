@@ -20,9 +20,8 @@ export default function RecipeModal(props: {
   onClose: (changed: boolean) => void;
 }) {
   const { addRecipe } = useBasketItemContext();
-
+  
   const removeRecipe = useDBRemove('recipes');
-
   const removeRecipeFromDB = async () => {
     await removeRecipe({ field: "id", conditional: "=", value: props.data.id });
   }

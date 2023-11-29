@@ -7,6 +7,7 @@ export default class Database {
   private name: string;
   private version: string;
   private DB: SQLite.SQLiteDatabase;
+  private storedRequests: {query: string, values?: any[], resolve: (value: SQLite.SQLResultSet | PromiseLike<SQLite.SQLResultSet>) => void, reject: (reason?: any) => void}[] = [];
 
   constructor(name: string, version: string) {
     this.name = name;
@@ -23,6 +24,12 @@ export default class Database {
         resolve
       );
     });
+  }
+
+  public OnReady(): void {
+    this.storedRequests.map(({query, values, resolve, reject}) => {
+      this.executeQuery(query, values).then(resolve).catch(reject);
+    })
   }
 
   async createTables(queries: string[]): Promise<SQLite.SQLResultSet[]> {
@@ -42,7 +49,11 @@ export default class Database {
     values?: any[]
   ): Promise<SQLite.SQLResultSet> {
     return new Promise((resolve, reject) => {
-      if (!this.DB) return;
+      if (!this.DB) {
+        console.log("Database not initialized yet. Storing request...");
+        this.storedRequests.push({query, values, resolve, reject});
+        return;
+      };
       this.DB.transaction((tx) => {
         tx.executeSql(
           query,

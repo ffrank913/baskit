@@ -6,7 +6,7 @@ import {
   Router,
   Database,
   DBContextProvider,
-  SCHEMA_INGREDIENTS,
+  SCHEMA_ITEMS,
   SCHEMA_RECIPES,
 } from "./src";
 import { BasketItemContextProvider } from "./src/context/basketItems/BasketItemsContextProvider";
@@ -23,8 +23,10 @@ export default function App() {
       await db.InitDB();
 
       await db
-        .createTables([SCHEMA_RECIPES, SCHEMA_INGREDIENTS])
+        .createTables([SCHEMA_RECIPES, SCHEMA_ITEMS])
         .catch((e) => console.error(e));
+
+      db.OnReady();
 
       setReady(true);
     };
@@ -35,9 +37,13 @@ export default function App() {
     if (ready) {
       SplashScreen.hideAsync();
       // db.executeQuery('drop table recipes')
-      // db.executeQuery('drop table ingredients')
+      // db.executeQuery('drop table items')
     }
   }, [ready]);
+
+  if (!ready) {
+    return <></>;
+  }
 
   return (
     <DBContextProvider db={db}>
