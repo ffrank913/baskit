@@ -18,7 +18,7 @@ export default function Basket() {
     <View style={styles.container}>
       <View style={styles.basketContainer}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Baskit</Text>
+          <Text style={styles.title}>baskit</Text>
           <TouchableHighlight
             style={{
               width: 48,

@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    backgroundColor: "transparent"
   },
   title: {
     paddingBottom: 16,

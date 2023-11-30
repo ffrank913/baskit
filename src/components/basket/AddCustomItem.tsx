@@ -63,12 +63,14 @@ export default function AddCustomItem(props: {
         onChangeText={setNameValue}
         onSubmitEditing={() => {
             props.confirmData({count: countValue, unit: unitValue, name: nameValue});
+            nameInput.current.blur();
             clearMe();
         }}
         />
       </View>
         <TouchableHighlight disabled={nameValue.length === 0} style={styles.button} onPress={() => {
           props.confirmData({count: countValue, unit: unitValue, name: nameValue});
+          clearMe();
         }}>
           <Text style={{...styles.buttonText, color: nameValue.length === 0 ? "rgba(120, 70, 120, 0.5)" : "white" }}>+</Text>
         </TouchableHighlight>
@@ -106,6 +108,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 22,
     marginLeft: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.1)"
   },
 });
 

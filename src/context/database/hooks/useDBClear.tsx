@@ -8,7 +8,7 @@ export default function useDBClear(dbName: string) {
   const clear = useCallback(async (): Promise<SQLResultSet> => {
     return new Promise((resolve, reject) => {
       if (!database) return;
-      const sql = `DROP TABLE ${dbName}`;
+      const sql = `TRUNCATE TABLE ${dbName}`;
       database
         .executeQuery(sql, [])
         .then((response) => {
